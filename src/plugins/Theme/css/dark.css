@@ -1,0 +1,14 @@
+:root[scheme=dark] {
+  --theme-setting-change-duration: 60ms;
+
+  --theme-color: #ffffff;
+  --theme-background: #242424;
+  --theme-border-color: #aaaaaa;
+  --theme-panel: #181818;
+
+  --progress-preloader-background: #242424;
+  --progress-preloader-title-color: white;
+  --progress-preloader-subtitle-color: white;
+  --progress-line-fill: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+  --progress-line-fill-skeleton: #4158D0;
+}

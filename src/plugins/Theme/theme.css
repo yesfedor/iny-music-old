@@ -1,0 +1,13 @@
+/* Import all theme pallets */
+@import url('./css/light.css');
+@import url('./css/dark.css');
+
+* {
+  transition: color, background, border-color, shadow, background-color, background-image;
+  transition-duration: var(--theme-setting-change-duration);
+}
+
+.theme-none {
+  transition: unset;
+  transition-duration: 0ms;
+}
