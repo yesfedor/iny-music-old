@@ -8,14 +8,6 @@ const routes = [
     }
   },
   {
-    path: '/welcome',
-    name: 'Welcome',
-    component: () => import(/* webpackChunkName: "welcome" */ '../views/Welcome.vue'),
-    meta: {
-      layout: 'LayoutMain'
-    }
-  },
-  {
     path: '/:pathMatch(.*)*',
     name: 'PageNotFound',
     component: () => import(/* webpackChunkName: "page-not-found" */ '../views/PageNotFound.vue'),
