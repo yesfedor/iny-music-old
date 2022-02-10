@@ -3,23 +3,67 @@
     <the-header class="layout__header"></the-header>
     <the-aside class="layout__aside"></the-aside>
     <the-wrapper class="layout__wrapper"></the-wrapper>
-    <the-footer class="layout__footer"></the-footer>
+    <the-player v-if="isPlayer" class="layout__player"></the-player>
   </div>
 </template>
 
 <script>
 import TheHeader from '../components/TheHeader.vue'
-import TheWrapper from '../components/TheWrapper.vue'
-import TheFooter from '../components/TheFooter.vue'
 import TheAside from '../components/TheAside.vue'
+import TheWrapper from '../components/TheWrapper.vue'
+import ThePlayer from '../components/ThePlayer.vue'
 
 export default {
   name: 'LayoutMain',
   components: {
     TheHeader,
-    TheWrapper,
-    TheFooter,
-    TheAside
+    TheAside,
+    ThePlayer,
+    TheWrapper
+  },
+  setup () {
+    const isPlayer = false
+    return {
+      isPlayer
+    }
   }
 }
 </script>
+
+<style scoped>
+.layout__main {
+  display: grid;
+  grid-template-areas: "the-aside main-view"
+                       "now-playing-bar now-playing-bar";
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 1fr auto;
+  min-height: 100vh;
+  position: relative;
+  width: 100%;
+  background: var(--layout-main-background);
+  color: var(--layout-main-color);
+}
+.layout__header {
+  width: 100%;
+  height: var(--header-height);
+  grid-area: main-view;
+  z-index: 3;
+}
+.layout__wrapper {
+  width: 100%;
+  grid-area: main-view;
+  min-height: 200vh;
+}
+.layout__aside {
+  width: calc(var(--aside-width) + 4px);
+  position: sticky;
+  top: 0px;
+  grid-area: the-aside;
+  z-index: 3;
+}
+.layout__player {
+  width: 100%;
+  height: 64px;
+  grid-area: now-playing-bar;
+}
+</style>

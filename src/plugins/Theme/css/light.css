@@ -1,11 +1,6 @@
 :root[scheme=light] {
   --theme-setting-change-duration: 60ms;
 
-  --theme-color: #242424;
-  --theme-background: #ffffff;
-  --theme-border-color: #757575;
-  --theme-panel: #effafa;
-
   --progress-preloader-background: #ffffff;
   --progress-preloader-title-color: #000000;
   --progress-preloader-subtitle-color: #000000;

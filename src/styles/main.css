@@ -1,5 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;0,400;0,600;1,200;1,400;1,600&display=swap');
+
 * {
   box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
+
+:root {
+  --header-height: 64px;
+  --aside-width: 250px;
+}
+
+::-webkit-scrollbar {
+  left:-100px;
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5);
+  border: 0px none #ffffff;
+  border-radius: 0px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.75);
+}
+::-webkit-scrollbar-thumb:active {
+  background: rgba(255, 255, 255, 1);
+}
+::-webkit-scrollbar-track {
+  background: var(--os-track-background);
+  border: 0px none #ffffff;
+  border-radius: 0px;
+}
+::-webkit-scrollbar-track:hover {
+  background: var(--os-track-background);
+}
+::-webkit-scrollbar-track:active {
+  background: var(--os-track-background);
+}
+::-webkit-scrollbar-corner {
+  background: var(--os-track-background);
 }
 
 html, body, #app, .layout {

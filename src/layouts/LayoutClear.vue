@@ -8,6 +8,13 @@
 
 <script>
 export default {
-
+  name: 'LayoutClear'
 }
 </script>
+
+<style scoped>
+.layout__clear {
+  display: block;
+  min-height: 100vh;
+}
+</style>

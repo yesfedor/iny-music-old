@@ -10,8 +10,8 @@ const Theme = reactive({
   allow: [],
   default: '',
   specialPurposeOld: null,
-  specialPurposeKey: 'init-20222',
-  specialPurposeName: 'light',
+  specialPurposeKey: 'init-music',
+  specialPurposeName: 'dark',
   create () {
     if (this.isCreate) {
       console.log('[Vue $theme]: A theme instance has already been created')
@@ -28,9 +28,9 @@ const Theme = reactive({
 
     this.$el = document.documentElement
     this.themes = {
-      light: {
-        icon: 'far fa-sun'
-      },
+      // light: {
+      //   icon: 'far fa-sun'
+      // },
       dark: {
         icon: 'far fa-moon'
       }

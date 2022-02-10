@@ -1,16 +1,10 @@
 <template>
-  <div class="main"></div>
+  <div>{{ $route.name }}</div>
 </template>
 
 <script>
-import { onMounted } from '@vue/runtime-core'
-
 export default {
   name: 'Main',
-  setup () {
-    onMounted(() => {
-      document.title = 'Main page'
-    })
-  }
+  setup () {}
 }
 </script>

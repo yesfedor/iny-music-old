@@ -1,14 +1,26 @@
 :root[scheme=dark] {
   --theme-setting-change-duration: 60ms;
 
-  --theme-color: #ffffff;
-  --theme-background: #242424;
-  --theme-border-color: #aaaaaa;
-  --theme-panel: #181818;
-
   --progress-preloader-background: #242424;
   --progress-preloader-title-color: white;
   --progress-preloader-subtitle-color: white;
   --progress-line-fill: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
   --progress-line-fill-skeleton: #4158D0;
+
+  --os-track-background: #121212;
+  --layout-main-background: #121212;
+  --layout-main-color: #fff;
+  --layout-main-color-subdued: #a7a7a7;
+  --layout-wrapper-spacer-top: 1.75rem;
+  --layout-wrapper-colorfull: rgba(0, 0, 0, .6);
+  --layout-wrapper-colorfull-ratio: 3;
+  --layout-wrapper-colorfull-gradient: linear-gradient(180deg, rgba(83, 83, 83, 1) 0%, transparent 100%);
+
+  --header-background: rgba(0, 0, 0, .5);
+  --header-color: white;
+  --header-color-hightlight: black;
+
+  --aside-background: #000000;
+  --aside-color: #b3b3b3;
+  --aside-color-hightlight: #ffffff;
 }
