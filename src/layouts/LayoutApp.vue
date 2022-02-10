@@ -12,17 +12,20 @@ import { ref } from '@vue/reactivity'
 import { useRoute } from 'vue-router'
 import { onMounted, watch } from '@vue/runtime-core'
 import LayoutMain from './LayoutMain.vue'
-import ProgressLine from '../plugins/Progress/ProgressLine.vue'
-import ProgressPreloader from '../plugins/Progress/ProgressPreloader.vue'
+import { useAuth } from '../plugins/Auth'
 
 export default {
   name: 'LayoutApp',
   components: {
-    LayoutMain,
-    ProgressLine,
-    ProgressPreloader
+    LayoutMain
   },
   setup () {
+    const auth = useAuth()
+    auth.install(1, {
+      routerPush: (routeName, routeReason) => {},
+      storeCommit: (what, payload) => {}
+    }).mounted()
+
     const route = useRoute()
     const component = ref(null)
     const onComponentChange = () => {
