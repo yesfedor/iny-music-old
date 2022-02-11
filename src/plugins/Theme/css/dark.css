@@ -1,4 +1,8 @@
 :root[scheme=dark] {
+  --color-primary: #1db954;
+
+  --os-track-background: #000000;
+
   --theme-setting-change-duration: 60ms;
 
   --progress-preloader-background: #242424;
@@ -7,7 +11,6 @@
   --progress-line-fill: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
   --progress-line-fill-skeleton: #4158D0;
 
-  --os-track-background: #121212;
   --layout-main-background: #121212;
   --layout-main-color: #fff;
   --layout-main-color-subdued: #a7a7a7;
@@ -16,11 +19,20 @@
   --layout-wrapper-colorfull-ratio: 3;
   --layout-wrapper-colorfull-gradient: linear-gradient(180deg, rgba(83, 83, 83, 1) 0%, transparent 100%);
 
-  --header-background: rgba(0, 0, 0, .5);
+  --header-background: rgba(0, 0, 0, .7);
   --header-color: white;
   --header-color-hightlight: black;
 
+  --aside-logo-color: #ffffff;
   --aside-background: #000000;
   --aside-color: #b3b3b3;
   --aside-color-hightlight: #ffffff;
+
+  --the-player-background: #181818;
+  --the-player-primary: #1db954;
+  --the-player-border-color: #282828;
+  --the-player-color: #b3b3b3;
+  --the-player-play-background: #ffffff;
+  --the-player-play-color: #000000;
+  --the-player-color-hightlight: #ffffff;
 }

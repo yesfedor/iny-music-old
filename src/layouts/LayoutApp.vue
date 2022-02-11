@@ -8,16 +8,18 @@
 </template>
 
 <script>
+import LayoutMain from './LayoutMain.vue'
+import LayoutClear from './LayoutClear.vue'
 import { ref } from '@vue/reactivity'
 import { useRoute } from 'vue-router'
 import { onMounted, watch } from '@vue/runtime-core'
-import LayoutMain from './LayoutMain.vue'
 import { useAuth } from '../plugins/Auth'
 
 export default {
   name: 'LayoutApp',
   components: {
-    LayoutMain
+    LayoutMain,
+    LayoutClear
   },
   setup () {
     const auth = useAuth()

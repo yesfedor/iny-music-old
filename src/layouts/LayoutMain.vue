@@ -12,6 +12,7 @@ import TheHeader from '../components/TheHeader.vue'
 import TheAside from '../components/TheAside.vue'
 import TheWrapper from '../components/TheWrapper.vue'
 import ThePlayer from '../components/ThePlayer.vue'
+import { ref } from '@vue/reactivity'
 
 export default {
   name: 'LayoutMain',
@@ -22,7 +23,7 @@ export default {
     TheWrapper
   },
   setup () {
-    const isPlayer = false
+    const isPlayer = ref(true)
     return {
       isPlayer
     }
@@ -55,13 +56,15 @@ export default {
   min-height: 200vh;
 }
 .layout__aside {
-  width: calc(var(--aside-width) + 4px);
+  width: calc(var(--aside-width));
   position: sticky;
   top: 0px;
   grid-area: the-aside;
   z-index: 3;
 }
 .layout__player {
+  position: sticky;
+  bottom: 0px;
   width: 100%;
   height: 64px;
   grid-area: now-playing-bar;

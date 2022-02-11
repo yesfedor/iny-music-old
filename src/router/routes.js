@@ -48,6 +48,14 @@ const routes = [
     }
   },
   {
+    path: '/collection',
+    name: 'Collection',
+    component: () => import(/* webpackChunkName: "collection" */ '../views/Collection.vue'),
+    meta: {
+      layout: 'LayoutMain'
+    }
+  },
+  {
     path: '/genre/:genreId',
     name: 'Genre',
     component: () => import(/* webpackChunkName: "genre" */ '../views/Genre.vue'),

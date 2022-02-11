@@ -1,6 +1,6 @@
 <template>
   <div class="layout__clear">
-    <div class="container mt-5">
+    <div class="container">
       <router-view></router-view>
     </div>
   </div>
