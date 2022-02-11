@@ -5,11 +5,6 @@
   font-family: 'Montserrat', sans-serif;
 }
 
-:root {
-  --header-height: 64px;
-  --aside-width: 250px;
-}
-
 ::-webkit-scrollbar {
   left:-100px;
   width: 12px;

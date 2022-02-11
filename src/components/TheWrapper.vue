@@ -35,14 +35,12 @@ export default {
   background: var(--layout-wrapper-colorfull);
   background: var(--layout-wrapper-colorfull-gradient);
   background-position: 0 0;
-  background-size: 100% 140%;
+  background-size: 100% 100%;
   background-position: 0 100%;
 }
 .the-wrapper__content {
   margin-top: calc(-1 * var(--header-height) * var(--layout-wrapper-colorfull-ratio));
-  padding-top: calc(var(--header-height) + var(--layout-wrapper-spacer-top));
-  padding-left: var(--layout-wrapper-spacer-top);
-  padding-right: var(--layout-wrapper-spacer-top);
-  padding-bottom: var(--header-height);
+  padding: calc(var(--header-height) + var(--layout-wrapper-spacer-top)) var(--layout-wrapper-spacer-top) var(--layout-wrapper-spacer-top) var(--layout-wrapper-spacer-top);
+  min-height: 100%;
 }
 </style>

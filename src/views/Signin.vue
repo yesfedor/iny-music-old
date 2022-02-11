@@ -13,16 +13,16 @@
         <form @submit.prevent class="col-12 signin__form">
           <div class="row signin-form">
             <div class="col-12 signin-form__item">
-              <label class="signin-form__label" for="signin-form-email">Эл. почта или имя пользователя</label>
-              <input class="signin-form__input" type="email" id="signin-form-email">
+              <label class="signin-form__label" for="signin-form-email">Эл. почта</label>
+              <input class="signin-form__input" type="email" id="signin-form-email" v-model="email">
             </div>
             <div class="col-12 signin-form__item">
               <label class="signin-form__label" for="signin-form-password">Пароль</label>
-              <input class="signin-form__input" type="password" id="signin-form-password">
+              <input class="signin-form__input" type="password" id="signin-form-password" v-model="password">
             </div>
             <div class="col-12 signin-form__item signin-form__item_actions">
               <span class="signin-form__restore">Не помню пароль</span>
-              <button class="signin-form__submit">Войти</button>
+              <button @click.prevent="login()" class="signin-form__submit">Войти</button>
             </div>
           </div>
         </form>
@@ -39,13 +39,45 @@
 </template>
 
 <script>
+import { ref } from '@vue/reactivity'
+import { Api } from '../plugins/Auth'
+import { useStore } from 'vuex'
+import { computed, watch } from '@vue/runtime-core'
+import { useRouter } from 'vue-router'
 export default {
   name: 'Signin',
-  setup () {}
+  setup () {
+    const router = useRouter()
+    const store = useStore()
+    const isAuth = computed(() => store.getters.isAuth)
+    const email = ref('')
+    const password = ref('')
+    const login = () => {
+      /**
+       * @todo Обработать ошибки в handler js
+       */
+      if (!email.value || !password.value) return false
+      Api.login(email.value, password.value)
+    }
+
+    watch(isAuth, () => {
+      if (isAuth.value) router.push({ name: 'Main' })
+    })
+
+    return {
+      email,
+      password,
+      login
+    }
+  }
 }
 </script>
 
 <style scoped>
+.signin {
+  display: flex;
+  margin-bottom: 3rem;
+}
 .signin__logo {
   margin: 1.25rem 0;
   display: flex;
@@ -117,6 +149,7 @@ export default {
   font-weight: 600;
   font-size: 1rem;
   border: 1px solid #000000;
+  border-radius: 0.25rem;
   min-height: 2.25rem;
 }
 .signin-form__input:focus {

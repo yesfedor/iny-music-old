@@ -278,6 +278,7 @@ export const Api = new Proxy({
     return response.data
   },
   /**
+   * @name register
    * @description При успешной авторизации возвращает userData, иначе то, что пришло с сервера
    * @async
    * @param {String} name
@@ -330,7 +331,7 @@ export const Api = new Proxy({
     const jwt = localStorage.getItem(this.config.localStorageName.jwt)
     const userData = this.parseJwt(jwt)
     if (!userData) this.logout()
-    this.setUserObject('login', userData)
+    this.storeCommit('login', userData)
   },
   parseJwt (jwt) {
     if (typeof jwt !== 'string') return false

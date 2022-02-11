@@ -36,6 +36,7 @@
         <div class="playlists__content"></div>
       </div>
       <div class="the-aside__footer"></div>
+      <div class="the-aside__player ratio ratio1x1"></div>
     </div>
     <div class="the-aside__sizer"></div>
   </aside>
@@ -56,6 +57,12 @@ export default {
 }
 </script>
 
+<style>
+:root {
+  --aside-width: 250px;
+}
+</style>
+
 <style scoped>
 .the-aside {
   display: flex;
@@ -64,17 +71,22 @@ export default {
   height: 100vh;
 }
 .the-aside__wrapper {
-  padding: 0rem 1.5rem;
+  padding-left: 1.5rem;
+  padding-right: 0.5rem;
   display: flex;
   flex-direction: column;
+  width: calc(100% - 3px);
   height: 100%;
 }
 .the-aside__sizer {
   margin-left: auto;
-  width: 8px;
+  width: 3px;
   height: 100%;
   background: var(--aside-background);
   cursor: col-resize;
+}
+.the-aside__sizer:hover {
+  background: var(--aside-color-hightlight);
 }
 .the-aside__logo {
   display: flex;
@@ -148,6 +160,10 @@ export default {
   display: block;
 }
 .the-aside__footer {
+  margin-top: auto;
+  display: block;
+}
+.the-aside__player {
   margin-top: auto;
   display: block;
 }

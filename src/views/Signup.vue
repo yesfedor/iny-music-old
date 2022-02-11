@@ -14,30 +14,34 @@
           <div class="row signup-form">
             <div class="col-12 signup-form__item">
               <label class="signup-form__label" for="signup-form-name">Ваше имя</label>
-              <input class="signup-form__input" type="text" id="signup-form-name">
+              <input class="signup-form__input" type="text" id="signup-form-name" v-model="name">
               <label class="signup-form__label signup-form__label_help" for="signup-form-name">Оно появится в вашем профиле.</label>
             </div>
             <div class="col-12 signup-form__item">
+              <label class="signup-form__label" for="signup-form-surname">Ваша фамилия</label>
+              <input class="signup-form__input" type="text" id="signup-form-surname" v-model="surname">
+            </div>
+            <div class="col-12 signup-form__item">
               <label class="signup-form__label" for="signup-form-email">Эл. почта</label>
-              <input class="signup-form__input" type="email" id="signup-form-email">
+              <input class="signup-form__input" type="email" id="signup-form-email" v-model="email">
             </div>
             <div class="col-12 signup-form__item">
               <label class="signup-form__label" for="signup-form-password">Придумайте пароль</label>
-              <input class="signup-form__input" type="password" id="signup-form-password">
+              <input class="signup-form__input" type="password" id="signup-form-password" v-model="password">
             </div>
             <div class="col-12 signup-form__item">
               <label class="signup-form__label" for="signup-form-password-repeat">Повторите пароль</label>
-              <input class="signup-form__input" type="password" id="signup-form-password-repeat">
+              <input class="signup-form__input" type="password" id="signup-form-password-repeat" v-model="passwordRepeat">
             </div>
             <div class="col-12 signup-form__item signup-form__item_line">
               <label class="signup-form__label signup-form__space-1" for="signup-form-gender-male">Я мужчина</label>
-              <input class="signup-form__input signup-form__space-2" type="radio" name="gender" id="signup-form-gender-male">
+              <input class="signup-form__input signup-form__space-2" type="radio" name="gender" value="male" id="signup-form-gender-male" v-model="gender">
               <label class="signup-form__label signup-form__space-1" for="signup-form-gender-female">Я Женщина</label>
-              <input class="signup-form__input signup-form__space-1" type="radio" name="gender" id="signup-form-gender-female">
+              <input class="signup-form__input signup-form__space-1" type="radio" name="gender" value="female" id="signup-form-gender-female" v-model="gender">
             </div>
             <div class="col-12 signup-form__item signup-form__item_actions">
-              <span class="signup-form__restore">Не помню пароль</span>
-              <button class="signup-form__submit">Зарегистрироваться</button>
+              <span class="signup-form__restore">Мои данные</span>
+              <button @click.prevent="register()" class="signup-form__submit">Зарегистрироваться</button>
             </div>
           </div>
         </form>
@@ -54,13 +58,65 @@
 </template>
 
 <script>
+import { computed, ref, watch } from '@vue/runtime-core'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import { Api } from '../plugins/Auth'
 export default {
   name: 'Signup',
-  setup () {}
+  setup () {
+    const router = useRouter()
+    const store = useStore()
+    const isAuth = computed(() => store.getters.isAuth)
+
+    const name = ref('')
+    const surname = ref('')
+    const email = ref('')
+    const gender = ref('')
+    const password = ref('')
+    const passwordRepeat = ref('')
+
+    const register = () => {
+      /**
+       * @todo Обработать ошибки в handler js
+       */
+      console.log(name.value)
+      console.log(surname.value)
+      console.log(email.value)
+      console.log(gender.value)
+      console.log(password.value)
+      console.log(passwordRepeat.value)
+      if (name.value.length > 2 && surname.value.length > 2 &&
+         (gender.value === 'male' || gender.value === 'female') &&
+         email.value.length >= 5 && password.value.length > 6 &&
+         password.value === passwordRepeat.value) {
+        Api.register(name.value, surname.value, email.value, gender.value, password.value).then(res => {
+          console.log(res)
+        })
+      }
+    }
+    watch(isAuth, () => {
+      if (isAuth.value) router.push({ name: 'Main' })
+    })
+
+    return {
+      name,
+      surname,
+      email,
+      gender,
+      password,
+      passwordRepeat,
+      register
+    }
+  }
 }
 </script>
 
 <style scoped>
+.signup {
+  display: flex;
+  margin-bottom: 3rem;
+}
 .signup__logo {
   margin: 1.25rem 0;
   display: flex;
@@ -144,6 +200,7 @@ export default {
   font-weight: 600;
   font-size: 1rem;
   border: 1px solid #000000;
+  border-radius: 0.25rem;
   min-height: 2.25rem;
 }
 .signup-form__input:focus {

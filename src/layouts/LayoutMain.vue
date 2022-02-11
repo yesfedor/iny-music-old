@@ -53,7 +53,7 @@ export default {
 .layout__wrapper {
   width: 100%;
   grid-area: main-view;
-  min-height: 200vh;
+  min-height: calc(100vh - var(--player-height));
 }
 .layout__aside {
   width: calc(var(--aside-width));
@@ -61,12 +61,13 @@ export default {
   top: 0px;
   grid-area: the-aside;
   z-index: 3;
+  max-height: calc(100vh - var(--player-height));
 }
 .layout__player {
   position: sticky;
   bottom: 0px;
   width: 100%;
-  height: 64px;
+  height: calc(var(--player-height) - 1px);
   grid-area: now-playing-bar;
 }
 </style>

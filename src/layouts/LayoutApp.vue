@@ -14,6 +14,7 @@ import { ref } from '@vue/reactivity'
 import { useRoute } from 'vue-router'
 import { onMounted, watch } from '@vue/runtime-core'
 import { useAuth } from '../plugins/Auth'
+import { useStore } from 'vuex'
 
 export default {
   name: 'LayoutApp',
@@ -22,10 +23,22 @@ export default {
     LayoutClear
   },
   setup () {
+    const store = useStore()
     const auth = useAuth()
     auth.install(1, {
       routerPush: (routeName, routeReason) => {},
-      storeCommit: (what, payload) => {}
+      storeCommit: (what, payload) => {
+        if ((what === 'login' || what === 'register') && typeof payload === 'object' && payload.uid) {
+          document.documentElement.classList.remove('user-auth-false')
+          document.documentElement.classList.add('user-auth-true')
+          store.commit('auth:true', payload)
+        }
+        if (what === 'logout') {
+          document.documentElement.classList.remove('user-auth-true')
+          document.documentElement.classList.add('user-auth-false')
+          store.commit('auth:false')
+        }
+      }
     }).mounted()
 
     const route = useRoute()

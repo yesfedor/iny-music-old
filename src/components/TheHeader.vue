@@ -1,5 +1,5 @@
 <template>
-  <header class="the-header">
+  <header class="the-header the-header_background_system">
     <div class="the-header__action">
       <button
         @click="$router.back()"
@@ -18,25 +18,36 @@
         <i class="fas fa-angle-right fa-lg the-header__text"></i>
       </button>
     </div>
-    <div class="the-header__action">
+    <div v-if="!isAuth" class="the-header__action">
       <button @click="$router.push({ name: 'Signup' })" class="the-header__button the-header__button_text the-header__text the-header__button_scale">Зарегистрироваться</button>
       <button @click="$router.push({ name: 'Signin' })" class="the-header__button the-header__button_fill the-header__button_scale">Войти</button>
+    </div>
+    <div v-else class="the-header__action the-header__action_user">
+      <button @click="logout()" class="the-header__button the-header__button_text the-header__text the-header__button_scale">Выйти</button>
     </div>
   </header>
 </template>
 
 <script>
-import { onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import { Api } from '../plugins/Auth'
 
 export default {
   name: 'TheHeader',
   setup () {
     // router.options.history.state.back
+    const store = useStore()
     const route = useRoute()
     const router = useRouter()
     const routerStateBack = ref(false)
     const routerStateForward = ref(false)
+    const isAuth = computed(() => store.getters.isAuth)
+    const user = computed(() => store.getters.user)
+    const logout = () => {
+      Api.logout()
+    }
 
     watch(route, () => {
       routerStateBack.value = router.options.history.state.back
@@ -49,12 +60,21 @@ export default {
     })
 
     return {
+      logout,
+      isAuth,
+      user,
       routerStateBack,
       routerStateForward
     }
   }
 }
 </script>
+
+<style>
+:root {
+  --header-height: 64px;
+}
+</style>
 
 <style scoped>
 .fa-angle-left {
@@ -69,9 +89,11 @@ export default {
   align-items: center;
   position: sticky;
   top: 0px;
-  background: var(--header-background);
   color: var(--header-color);
   z-index: 3;
+}
+.the-header_background_system {
+  background: var(--header-background);
 }
 .the-header__text {
   color: var(--header-color);
