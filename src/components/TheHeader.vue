@@ -1,5 +1,5 @@
 <template>
-  <header class="the-header the-header_background_system">
+  <header :class="isAuth ? '':'the-header_background_system'" class="the-header">
     <div class="the-header__action">
       <button
         @click="$router.back()"
@@ -22,8 +22,23 @@
       <button @click="$router.push({ name: 'Signup' })" class="the-header__button the-header__button_text the-header__text the-header__button_scale">Зарегистрироваться</button>
       <button @click="$router.push({ name: 'Signin' })" class="the-header__button the-header__button_fill the-header__button_scale">Войти</button>
     </div>
-    <div v-else class="the-header__action the-header__action_user">
-      <button @click="logout()" class="the-header__button the-header__button_text the-header__text the-header__button_scale">Выйти</button>
+    <div v-else class="the-header__action">
+      <button class="the-header__button the-header__button_text the-header__text the-header__button_scale the-header__button_elipse">Сменить тариф</button>
+      <div class="dropdown">
+        <button class="the-header__button the-header__button_text the-header__text the-header__button_elipse dropdown-toggle" type="button" id="user-dropdown-menu" data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="the-header__button-inner">{{ user.name }}</span>
+          <span data-expanded="false" class="the-header__button-inner fas fa-angle-down"></span>
+          <span data-expanded="true" class="the-header__button-inner fas fa-angle-up"></span>
+        </button>
+        <ul class="dropdown-menu the-header__dropdown" aria-labelledby="user-dropdown-menu">
+          <li class="the-header__dropdown-item">
+            <button @click="$router.push({ name: 'Account' })" class="the-header__dropdown-button dropdown-item">Аккаунт</button>
+            <button @click="$router.push({ name: 'Profile' })" class="the-header__dropdown-button dropdown-item">Профиль</button>
+            <button @click="goIny()" class="the-header__dropdown-button dropdown-item">INY Media</button>
+            <button @click="logout()" class="the-header__dropdown-button dropdown-item">Выйти</button>
+          </li>
+        </ul>
+      </div>
     </div>
   </header>
 </template>
@@ -45,6 +60,9 @@ export default {
     const routerStateForward = ref(false)
     const isAuth = computed(() => store.getters.isAuth)
     const user = computed(() => store.getters.user)
+    const goIny = () => {
+      window.open('//iny.su', '_blank')
+    }
     const logout = () => {
       Api.logout()
     }
@@ -60,6 +78,7 @@ export default {
     })
 
     return {
+      goIny,
       logout,
       isAuth,
       user,
@@ -77,6 +96,9 @@ export default {
 </style>
 
 <style scoped>
+.dropdown-toggle:after {
+  display: none;
+}
 .fa-angle-left {
   padding-left: 0rem;
 }
@@ -143,5 +165,49 @@ export default {
 }
 .the-header__button_scale:hover {
   transform: scale(1.05);
+}
+.the-header__button_elipse {
+  margin-left: 1.5rem;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid var(--layout-main-color-subdued);
+  border-radius: 1.5rem;
+  background: var(--layout-main-background);
+  color: var(--header-color);
+}
+.the-header__button_elipse[aria-expanded=true] {
+  background: var(--header-dropdown-background);
+  color: var(--header-dropdown-color);
+}
+.the-header__button_elipse[aria-expanded=true] .the-header__button-inner[data-expanded=false] {
+  display: none;
+}
+.the-header__button_elipse[aria-expanded=false] .the-header__button-inner[data-expanded=true] {
+  display: none;
+}
+.the-header__dropdown {
+  padding: 0.25rem;
+  margin-top: 0.25rem !important;
+  width: 12rem;
+  background: var(--header-dropdown-background);
+}
+.the-header__dropdown-item {
+  background: var(--header-dropdown-background);
+}
+.the-header__dropdown-button {
+  padding: 0.5rem 0.25rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--header-dropdown-color);
+}
+.the-header__dropdown-button:hover, .the-header__dropdown-button:focus {
+  background: var(--header-dropdown-background-hover);
+  color: var(--header-dropdown-color-hover);
+}
+.the-header__button-inner {
+  padding-left: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--header-dropdown-color);
 }
 </style>

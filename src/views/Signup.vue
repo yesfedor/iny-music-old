@@ -43,6 +43,9 @@
               <span class="signup-form__restore">Мои данные</span>
               <button @click.prevent="register()" class="signup-form__submit">Зарегистрироваться</button>
             </div>
+            <div v-show="apiError" class="col-12 signup-form__item">
+              <span class="signup-form__label_error">{{ apiError }}</span>
+            </div>
           </div>
         </form>
         <div class="col-12">
@@ -50,7 +53,8 @@
         </div>
         <div class="col-12 signup__another">
           <span class="signup__another-text">Уже есть аккаунт?</span>
-          <router-link :to="{ name: 'Signin' }" class="signup__another-button">Войти</router-link>
+          <router-link v-if="$route.query.redirectUrl" :to="{ name: 'Signin', query: { redirectUrl: ($route.query.redirectUrl) }}" class="signup__another-button">Войти</router-link>
+          <router-link v-else :to="{ name: 'Signin' }" class="signup__another-button">Войти</router-link>
         </div>
       </div>
     </div>
@@ -58,13 +62,15 @@
 </template>
 
 <script>
+import AuthHandler from '../plugins/Auth/handler'
 import { computed, ref, watch } from '@vue/runtime-core'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Api } from '../plugins/Auth'
 export default {
   name: 'Signup',
   setup () {
+    const route = useRoute()
     const router = useRouter()
     const store = useStore()
     const isAuth = computed(() => store.getters.isAuth)
@@ -75,24 +81,25 @@ export default {
     const gender = ref('')
     const password = ref('')
     const passwordRepeat = ref('')
+    const apiError = ref('')
 
     const register = () => {
-      /**
-       * @todo Обработать ошибки в handler js
-       */
-      console.log(name.value)
-      console.log(surname.value)
-      console.log(email.value)
-      console.log(gender.value)
-      console.log(password.value)
-      console.log(passwordRepeat.value)
+      apiError.value = ''
+      const queryUrl = route.query?.redirectUrl
       if (name.value.length > 2 && surname.value.length > 2 &&
          (gender.value === 'male' || gender.value === 'female') &&
          email.value.length >= 5 && password.value.length > 6 &&
          password.value === passwordRepeat.value) {
-        Api.register(name.value, surname.value, email.value, gender.value, password.value).then(res => {
-          console.log(res)
+        Api.register(name.value, surname.value, email.value, gender.value, password.value).then(response => {
+          if (response.uid) {
+            if (queryUrl) router.push(queryUrl)
+            else router.push({ name: 'Main' })
+          } else {
+            apiError.value = AuthHandler(response.status)
+          }
         })
+      } else {
+        apiError.value = 'Заполните все поля'
       }
     }
     watch(isAuth, () => {
@@ -100,6 +107,7 @@ export default {
     })
 
     return {
+      apiError,
       name,
       surname,
       email,
@@ -194,6 +202,15 @@ export default {
   font-weight: 400;
   margin-top: 0.25rem;
   margin-bottom: 0rem;
+}
+.signup-form__label_error {
+  display: block;
+  text-align: right;
+  grid-area: form-label-help;
+  font-weight: 400;
+  margin-top: 0.25rem;
+  margin-bottom: 0rem;
+  color: red;
 }
 .signup-form__input {
   padding: 0.25rem;

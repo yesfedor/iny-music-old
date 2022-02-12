@@ -22,6 +22,10 @@
   --header-background: rgba(0, 0, 0, .7);
   --header-color: white;
   --header-color-hightlight: black;
+  --header-dropdown-background: #282828;
+  --header-dropdown-background-hover: #343434;
+  --header-dropdown-color: rgba(255, 255, 255, 0.9);
+  --header-dropdown-color-hover: rgba(255, 255, 255, 1);
 
   --aside-logo-color: #ffffff;
   --aside-background: #000000;

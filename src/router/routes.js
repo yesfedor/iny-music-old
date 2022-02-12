@@ -8,6 +8,14 @@ const routes = [
     }
   },
   {
+    path: '/account',
+    name: 'Account',
+    component: () => import(/* webpackChunkName: "account" */ '../views/Account.vue'),
+    meta: {
+      layout: 'LayoutMain'
+    }
+  },
+  {
     path: '/artist/:artistId',
     name: 'Artist',
     component: () => import(/* webpackChunkName: "artist" */ '../views/Artist.vue'),

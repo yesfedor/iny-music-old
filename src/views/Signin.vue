@@ -24,6 +24,9 @@
               <span class="signin-form__restore">Не помню пароль</span>
               <button @click.prevent="login()" class="signin-form__submit">Войти</button>
             </div>
+            <div v-show="apiError" class="col-12 signin-form__item">
+              <span class="signin-form__label_help">{{apiError}}</span>
+            </div>
           </div>
         </form>
         <div class="col-12">
@@ -31,7 +34,8 @@
         </div>
         <div class="col-12 signin__another">
           <span class="signin__another-text">Нет аккаунта?</span>
-          <router-link :to="{ name: 'Signup' }" class="signin__another-button">Регистрация в Music</router-link>
+          <router-link v-if="$route.query.redirectUrl" :to="{ name: 'Signup', query: { redirectUrl: ($route.query.redirectUrl) }}" class="signin__another-button">Регистрация в Music</router-link>
+          <router-link v-else :to="{ name: 'Signup' }" class="signin__another-button">Регистрация в Music</router-link>
         </div>
       </div>
     </div>
@@ -43,21 +47,34 @@ import { ref } from '@vue/reactivity'
 import { Api } from '../plugins/Auth'
 import { useStore } from 'vuex'
 import { computed, watch } from '@vue/runtime-core'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import AuthHandler from '../plugins/Auth/handler'
 export default {
   name: 'Signin',
   setup () {
+    const route = useRoute()
     const router = useRouter()
     const store = useStore()
     const isAuth = computed(() => store.getters.isAuth)
     const email = ref('')
     const password = ref('')
+    const apiError = ref('')
+
     const login = () => {
-      /**
-       * @todo Обработать ошибки в handler js
-       */
-      if (!email.value || !password.value) return false
-      Api.login(email.value, password.value)
+      apiError.value = ''
+      const queryUrl = route.query?.redirectUrl
+      if (!email.value || !password.value) {
+        apiError.value = 'Заполните все поля'
+        return false
+      }
+      Api.login(email.value, password.value).then(response => {
+        if (response.uid) {
+          if (queryUrl) router.push(queryUrl)
+          else router.push({ name: 'Main' })
+        } else {
+          apiError.value = AuthHandler(response.status)
+        }
+      })
     }
 
     watch(isAuth, () => {
@@ -65,6 +82,7 @@ export default {
     })
 
     return {
+      apiError,
       email,
       password,
       login
@@ -129,7 +147,7 @@ export default {
 }
 .signin-form__item {
   display: grid;
-  grid-template-areas: "form-label" "form-input";
+  grid-template-areas: "form-label" "form-input" "form-label-help";
   margin-bottom: 1.15rem;
 }
 .signin-form__item_actions {
@@ -143,6 +161,15 @@ export default {
   font-size: 0.85rem;
   margin-bottom: 0.25rem;
   grid-area: form-label;
+}
+.signin-form__label_help {
+  display: block;
+  grid-area: form-label-help;
+  font-weight: 400;
+  margin-top: 0.25rem;
+  margin-bottom: 0rem;
+  text-align: right;
+  color: red;
 }
 .signin-form__input {
   padding: 0.25rem;
