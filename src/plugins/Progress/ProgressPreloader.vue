@@ -1,7 +1,7 @@
 <template>
   <div v-if="$progress.options.isPreloader" class="progress-preloader">
-    <span class="progress-preloader__title">Title Loader</span>
-    <span class="progress-preloader__subtitle">in ./src/Progress/ProgressPreloader.vue</span>
+    <span class="progress-preloader__title">Music</span>
+    <span class="progress-preloader__subtitle">Please, wait...</span>
   </div>
 </template>
 

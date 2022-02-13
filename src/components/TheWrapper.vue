@@ -1,12 +1,12 @@
 <template>
-  <div class="the-wrapper">
+  <main class="the-wrapper">
     <div class="the-wrapper__colorfull"></div>
-    <main class="the-wrapper__content">
+    <section class="the-wrapper__content">
       <router-view
         :class="['the-wrapper__page', 'the-wrapper__page_' + pageClassPrefix ]"
       ></router-view>
-    </main>
-  </div>
+    </section>
+  </main>
 </template>
 
 <script>

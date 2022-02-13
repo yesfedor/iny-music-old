@@ -1,5 +1,5 @@
 <template>
-  <div class="the-mobile-bar">
+  <section class="the-mobile-bar">
     <router-link :to="{ name: 'Main' }" :class="$route.name === 'Main' ? 'the-mobile-bar__item_active' : ''" class="the-mobile-bar__item">
       <i class="the-mobile-bar__icon fas fa-home"></i>
       <span class="the-mobile-bar__text">Главная</span>
@@ -16,7 +16,7 @@
       <i class="the-mobile-bar__icon fas fa-video"></i>
       <span class="the-mobile-bar__text">INY Media</span>
     </a>
-  </div>
+  </section>
 </template>
 
 <script>
