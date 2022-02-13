@@ -92,7 +92,8 @@ const routes = [
     name: 'Search',
     component: () => import(/* webpackChunkName: "search" */ '../views/Search.vue'),
     meta: {
-      layout: 'LayoutMain'
+      layout: 'LayoutMain',
+      isSearch: true
     }
   },
   {

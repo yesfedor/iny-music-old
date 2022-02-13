@@ -1,45 +1,53 @@
 <template>
   <header :class="isAuth ? '':'the-header_background_system'" class="the-header">
-    <div class="the-header__action">
-      <button
-        @click="$router.back()"
-        :class="(routerStateBack ? '':'the-header__button_disabled')"
-        class="the-header__button the-header__button_circle"
-        :disabled="(routerStateBack ? false : true)"
-      >
-        <i class="fas fa-angle-left fa-lg the-header__text"></i>
-      </button>
-      <button
-        @click="$router.forward()"
-        :class="(routerStateForward ? '':'the-header__button_disabled')"
-        class="the-header__button the-header__button_circle"
-        :disabled="(routerStateForward ? false : true)"
-      >
-        <i class="fas fa-angle-right fa-lg the-header__text"></i>
-      </button>
-    </div>
-    <div v-if="!isAuth" class="the-header__action">
-      <button @click="$router.push({ name: 'Signup' })" class="the-header__button the-header__button_text the-header__text the-header__button_scale">Зарегистрироваться</button>
-      <button @click="$router.push({ name: 'Signin' })" class="the-header__button the-header__button_fill the-header__button_scale">Войти</button>
-    </div>
-    <div v-else class="the-header__action">
-      <button class="the-header__button the-header__button_text the-header__text the-header__button_scale the-header__button_elipse">Сменить тариф</button>
-      <div class="dropdown">
-        <button class="the-header__button the-header__button_text the-header__text the-header__button_elipse dropdown-toggle" type="button" id="user-dropdown-menu" data-bs-toggle="dropdown" aria-expanded="false">
-          <span class="the-header__button-inner">{{ user.name }}</span>
-          <span data-expanded="false" class="the-header__button-inner fas fa-angle-down"></span>
-          <span data-expanded="true" class="the-header__button-inner fas fa-angle-up"></span>
+    <template v-if="$position.breakpoint >= 3">
+      <div class="the-header__action">
+        <button
+          @click="$router.back()"
+          :class="(routerStateBack ? '':'the-header__button_disabled')"
+          class="the-header__button the-header__button_circle"
+          :disabled="(routerStateBack ? false : true)"
+        >
+          <i class="fas fa-angle-left fa-lg the-header__text"></i>
         </button>
-        <ul class="dropdown-menu the-header__dropdown" aria-labelledby="user-dropdown-menu">
-          <li class="the-header__dropdown-item">
-            <button @click="$router.push({ name: 'Account' })" class="the-header__dropdown-button dropdown-item">Аккаунт</button>
-            <button @click="$router.push({ name: 'Profile' })" class="the-header__dropdown-button dropdown-item">Профиль</button>
-            <button @click="goIny()" class="the-header__dropdown-button dropdown-item">INY Media</button>
-            <button @click="logout()" class="the-header__dropdown-button dropdown-item">Выйти</button>
-          </li>
-        </ul>
+        <button
+          @click="$router.forward()"
+          :class="(routerStateForward ? '':'the-header__button_disabled')"
+          class="the-header__button the-header__button_circle"
+          :disabled="(routerStateForward ? false : true)"
+        >
+          <i class="fas fa-angle-right fa-lg the-header__text"></i>
+        </button>
+        <div v-if="isSearch" class="the-header__search">
+          <i class="fas fa-search fa-lg the-header__search-icon"></i>
+          <input placeholder="Исполнитель, трек или альбом" type="search" class="the-header__search-input" v-model="search">
+        </div>
       </div>
-    </div>
+      <div class="the-header__action the-header__action_left js-header-action"></div>
+      <div v-if="!isAuth" class="the-header__action">
+        <button @click="$router.push({ name: 'Signup' })" class="the-header__button the-header__button_text the-header__text the-header__button_scale">Зарегистрироваться</button>
+        <button @click="$router.push({ name: 'Signin' })" class="the-header__button the-header__button_fill the-header__button_scale">Войти</button>
+      </div>
+      <div v-else class="the-header__action">
+        <button class="d-none the-header__button the-header__button_text the-header__text the-header__button_scale the-header__button_elipse">Сменить тариф</button>
+        <div class="dropdown">
+          <button class="the-header__button the-header__button_text the-header__text the-header__button_elipse dropdown-toggle" type="button" id="user-dropdown-menu" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="the-header__button-inner">{{ user.name }}</span>
+            <span data-expanded="false" class="the-header__button-inner fas fa-angle-down"></span>
+            <span data-expanded="true" class="the-header__button-inner fas fa-angle-up"></span>
+          </button>
+          <ul class="dropdown-menu the-header__dropdown" aria-labelledby="user-dropdown-menu">
+            <li class="the-header__dropdown-item">
+              <button @click="$router.push({ name: 'Account' })" class="the-header__dropdown-button dropdown-item">Аккаунт</button>
+              <button @click="$router.push({ name: 'Profile' })" class="the-header__dropdown-button dropdown-item">Профиль</button>
+              <button @click="goIny()" class="the-header__dropdown-button dropdown-item">INY Media</button>
+              <button @click="logout()" class="the-header__dropdown-button dropdown-item">Выйти</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </template>
+    <template v-else></template>
   </header>
 </template>
 
@@ -60,6 +68,8 @@ export default {
     const routerStateForward = ref(false)
     const isAuth = computed(() => store.getters.isAuth)
     const user = computed(() => store.getters.user)
+    const isSearch = ref(false)
+    const search = ref('')
     const goIny = () => {
       window.open('//iny.su', '_blank')
     }
@@ -68,8 +78,12 @@ export default {
     }
 
     watch(route, () => {
+      // router state
       routerStateBack.value = router.options.history.state.back
       routerStateForward.value = router.options.history.state.forward
+
+      // router meta
+      isSearch.value = (route.meta.isSearch ? route.meta?.isSearch : false)
     })
 
     onMounted(() => {
@@ -78,6 +92,8 @@ export default {
     })
 
     return {
+      isSearch,
+      search,
       goIny,
       logout,
       isAuth,
@@ -125,6 +141,9 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.the-header__action_left {
+  margin-right: auto;
 }
 .the-header__button {
   text-transform: uppercase;
@@ -209,5 +228,29 @@ export default {
   cursor: pointer;
   font-weight: 600;
   color: var(--header-dropdown-color);
+}
+.the-header__search {
+  margin-left: 1rem;
+  padding: 0.25rem;
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background: var(--header-color);
+  border-radius: 3rem;
+}
+.the-header__search-input {
+  padding: 0.25rem 0.25rem;
+  width: 17rem;
+  font-weight: 400;
+  font-size: 14px;
+  outline: none;
+  border: none;
+  border-radius: 3rem;
+}
+.the-header__search-icon {
+  padding: 0rem 0.5rem;
+  color: var(--header-color-hightlight);
 }
 </style>
