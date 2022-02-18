@@ -2,11 +2,23 @@
   <section class="the-player">
     <app-banner-auth v-if="!isAuth" class="the-player__banner"></app-banner-auth>
     <div v-else class="the-player__wrapper">
-      <div class="the-player__info-bar">
+      <div class="the-player__info-bar" @click="overlayMobileToggle()">
         <img class="the-player__poster ratio ration1x1" :src="song.posterUrl">
         <div class="the-player__info-text">
-          <router-link :to="{ name: 'Playlist', params: { playlistId: song.playlistId }}" class="the-player__title">{{ song.title }}</router-link>
-          <router-link :to="{ name: 'Artist', params: { artistId: author.id }}" class="the-player__author">{{ author.name }} {{ author.surname }}</router-link>
+          <router-link
+            :to="{ name: 'Playlist', params: { playlistId: song.playlistId }}"
+            class="the-player__title text-truncate"
+            @click.stop
+          >
+            {{ song.title }}
+          </router-link>
+          <router-link
+            :to="{ name: 'Artist', params: { artistId: author.id }}"
+            class="the-player__author text-truncate"
+            @click.stop
+          >
+            {{ author.name }} {{ author.surname }}
+          </router-link>
         </div>
         <i class="the-player__like far fa-heart"></i>
       </div>
@@ -30,23 +42,35 @@
         <div class="the-player__tools-bar-volume"></div>
       </div>
     </div>
+    <div class="the-player-plugin">
+      <the-player-overlay-mobile v-if="isOverlayMobileOpen" @click="overlayMobileToggle()"></the-player-overlay-mobile>
+    </div>
   </section>
 </template>
 
 <script>
+import ThePlayerOverlayMobile from './ThePlayerOverlayMobile.vue'
+import AppBannerAuth from './AppBannerAuth.vue'
 import { computed, ref } from '@vue/runtime-core'
 import { useStore } from 'vuex'
-import AppBannerAuth from './AppBannerAuth.vue'
-
+import { usePosition } from '../plugins/hooks'
 export default {
   name: 'ThePlayer',
   components: {
-    AppBannerAuth
+    AppBannerAuth,
+    ThePlayerOverlayMobile
   },
   setup () {
+    const $position = usePosition()
     const store = useStore()
     const isAuth = computed(() => store.getters.isAuth)
     const user = computed(() => store.getters.user)
+    const isOverlayMobileOpen = ref(false)
+    const overlayMobileToggle = () => {
+      if ($position.breakpoint < 3) {
+        isOverlayMobileOpen.value = !isOverlayMobileOpen.value
+      }
+    }
     const author = ref({
       id: 1,
       name: 'Selena',
@@ -60,6 +84,8 @@ export default {
     })
 
     return {
+      overlayMobileToggle,
+      isOverlayMobileOpen,
       author,
       song,
       isAuth,
@@ -71,10 +97,16 @@ export default {
 
 <style>
 html.user-auth-true {
-  --player-height: 90px;
+  --player-height: 50px;
 }
 html.user-auth-false {
-  --player-height: 80px;
+  --player-height: 90px;
+}
+
+@media (min-width: 768px) {
+  html.user-auth-true {
+    --player-height: 90px !important;
+  }
 }
 </style>
 
@@ -96,6 +128,7 @@ html.user-auth-false {
   display: flex;
   align-items: center;
   padding: 1rem;
+  height: 100%;
 }
 .the-player__poster {
   width: calc(var(--player-height) - 2px - 2rem);
@@ -195,5 +228,39 @@ html.user-auth-false {
   height: 5px;
   border-radius: 5px;
   background-color: var(--the-player-line);
+}
+
+@media (max-width: 767.98px) {
+  .the-player__manage-bar, .the-player__manage-time, .the-player__tools-bar {
+    display: none;
+  }
+  .the-player__info-bar {
+    width: 100%;
+  }
+  .the-player__poster {
+    width: var(--player-height);
+  }
+  .the-player__info-bar {
+    padding: 0.25rem 1.5rem 0.25rem 0;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+  }
+  .the-player__info-text {
+    padding: 0.75rem 0.5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .the-player__author {
+    padding-left: 0.5rem;
+  }
+  .the-player__like {
+    margin-left: auto;
+  }
+  .the-player__title, .the-player__author {
+    max-width: 100%;
+    display: inline-block;
+  }
 }
 </style>

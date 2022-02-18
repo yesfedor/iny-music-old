@@ -40,6 +40,7 @@
   --the-player-play-background: #ffffff;
   --the-player-play-color: #000000;
   --the-player-color-hightlight: #ffffff;
+  --the-player-overlay-mobile-background: rgba(0, 0, 0, 0.5);
 
   --mobile-menu-background: #181818;
   --mobile-menu-border-color: #121212;
