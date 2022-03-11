@@ -38,7 +38,7 @@
       <div class="the-aside__footer"></div>
       <div class="the-aside__player ratio ratio1x1"></div>
     </div>
-    <div class="the-aside__sizer"></div>
+    <div class="the-aside__sizer" draggable="true" @drag="sizerDrag" @dragend="sizerDrop"></div>
   </aside>
 </template>
 
@@ -46,11 +46,27 @@
 export default {
   name: 'TheAside',
   setup () {
+    let asideWidth = localStorage.getItem('asideWidth') || '250px'
+    document.documentElement.style.setProperty('--aside-width', asideWidth)
+
     const createPlaylist = () => {
       // router push on new playlist
     }
+    const sizerDrag = (event) => {
+      if (event.clientX >= 230 && event.clientX <= 450) {
+        asideWidth = event.clientX
+        document.documentElement.style.setProperty('--aside-width', asideWidth + 'px')
+        localStorage.setItem('asideWidth', event.clientX + 'px')
+      }
+    }
+    const sizerDrop = (event) => {
+      console.log('123123')
+    }
 
     return {
+      asideWidth,
+      sizerDrag,
+      sizerDrop,
       createPlaylist
     }
   }
@@ -59,7 +75,7 @@ export default {
 
 <style>
 :root {
-  --aside-width: 250px;
+  --aside-width: v-bind(asideWidth);
 }
 </style>
 
@@ -80,10 +96,11 @@ export default {
 }
 .the-aside__sizer {
   margin-left: auto;
-  width: 3px;
+  width: 4px;
   height: 100%;
   background: var(--aside-background);
   cursor: col-resize;
+  user-select: none;
 }
 .the-aside__sizer:hover {
   background: var(--aside-color-hightlight);

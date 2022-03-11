@@ -26,7 +26,7 @@
         <div class="the-player__manage-tools">
           <i class="the-player__manage-icon the-player__manage-icon_random fas fa-random"></i>
           <i class="the-player__manage-icon fas fa-step-backward"></i>
-          <i class="the-player__manage-icon the-player__manage-icon_play fas fa-play fa-lg"></i>
+          <i class="the-player__manage-icon the-player__manage-icon_play fas fa-pause fa-lg"></i>
           <i class="the-player__manage-icon fas fa-step-forward"></i>
           <i class="the-player__manage-icon the-player__manage-icon_redo fas fa-redo"></i>
         </div>
@@ -54,6 +54,7 @@ import AppBannerAuth from './AppBannerAuth.vue'
 import { computed, ref } from '@vue/runtime-core'
 import { useStore } from 'vuex'
 import { usePosition } from '../plugins/hooks'
+import usePlayerApi from '../plugins/Player'
 export default {
   name: 'ThePlayer',
   components: {
@@ -61,6 +62,9 @@ export default {
     ThePlayerOverlayMobile
   },
   setup () {
+    const playerApi = usePlayerApi()
+    playerApi.initial()
+    playerApi.importSongBySid(1)
     const $position = usePosition()
     const store = useStore()
     const isAuth = computed(() => store.getters.isAuth)
@@ -71,17 +75,8 @@ export default {
         isOverlayMobileOpen.value = !isOverlayMobileOpen.value
       }
     }
-    const author = ref({
-      id: 1,
-      name: 'Selena',
-      surname: 'Gomez'
-    })
-    const song = ref({
-      id: 1,
-      playlistId: 1,
-      title: 'Rare',
-      posterUrl: 'https://i.scdn.co/image/ab67616d000048512abcc266597eb46f897a8666'
-    })
+    const author = ref(playerApi.state.currentSong.authorData)
+    const song = ref(playerApi.state.currentSong.songData)
 
     return {
       overlayMobileToggle,
