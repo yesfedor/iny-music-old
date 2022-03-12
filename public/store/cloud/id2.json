@@ -1,0 +1,13 @@
+{
+  "author": {
+    "id": 2,
+    "name": "OG",
+    "surname": "Buda" 
+  },
+  "song": {
+    "id": 1,
+    "playlistId": 1,
+    "title": "Добро Пожаловать",
+    "posterUrl": "https://i.scdn.co/image/ab67616d00001e02605973ce1dcd8026ea9662e3"
+  }
+}

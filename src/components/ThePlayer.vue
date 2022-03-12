@@ -26,7 +26,11 @@
         <div class="the-player__manage-tools">
           <i class="the-player__manage-icon the-player__manage-icon_random fas fa-random"></i>
           <i class="the-player__manage-icon fas fa-step-backward"></i>
-          <i class="the-player__manage-icon the-player__manage-icon_play fas fa-pause fa-lg"></i>
+          <i
+            :class="playButtonIcon"
+            class="the-player__manage-icon the-player__manage-icon_play fas fa-lg"
+            @click="togglePlay"
+          ></i>
           <i class="the-player__manage-icon fas fa-step-forward"></i>
           <i class="the-player__manage-icon the-player__manage-icon_redo fas fa-redo"></i>
         </div>
@@ -62,9 +66,6 @@ export default {
     ThePlayerOverlayMobile
   },
   setup () {
-    const playerApi = usePlayerApi()
-    playerApi.initial()
-    playerApi.importSongBySid(1)
     const $position = usePosition()
     const store = useStore()
     const isAuth = computed(() => store.getters.isAuth)
@@ -75,14 +76,28 @@ export default {
         isOverlayMobileOpen.value = !isOverlayMobileOpen.value
       }
     }
-    const author = ref(playerApi.state.currentSong.authorData)
-    const song = ref(playerApi.state.currentSong.songData)
+
+    const playerApi = usePlayerApi()
+    playerApi.initial()
+
+    playerApi.importSongBySid(2)
+
+    const author = computed(() => playerApi.state.currentSong.authorData)
+    const song = computed(() => playerApi.state.currentSong.songData)
+    const playButtonIcon = computed(() => {
+      return playerApi.playerState ? 'fa-pause' : 'fa-play'
+    })
+    const togglePlay = () => {
+      playerApi.togglePlay()
+    }
 
     return {
       overlayMobileToggle,
       isOverlayMobileOpen,
       author,
       song,
+      playButtonIcon,
+      togglePlay,
       isAuth,
       user
     }
