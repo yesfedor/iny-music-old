@@ -7,8 +7,8 @@ var configApiCore = {
   password: 'asd486982asd',
   host: 'vh370.timeweb.ru',
   port: 21,
-  localRoot: 'D:/development/project/myapp/iny-music/api/core',
-  remoteRoot: 'music-app/core/',
+  localRoot: 'E:/development/iny-music/api/core',
+  remoteRoot: 'spotyfree/core/',
   // include: ["*", "**/*"],      // this would upload everything except dot files
   include: ['*', '**/*'],
   // e.g. exclude sourcemaps, and ALL files in node_modules (including dot files)
