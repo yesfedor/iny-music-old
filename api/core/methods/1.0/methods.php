@@ -280,6 +280,15 @@ $methods = [
         'default' => 0,
       ]
     ]
+  ],
+  'shell.setGenre' => [
+    'in_active' => true,
+    'beforeMethods' => [],
+    'objects' => ['Shell'],
+    'title' => 'Time()',
+    'detail' => 'Get server time',
+    'link' => '/time',
+    'props' => []
   ]
 ];
 
