@@ -1,9 +1,12 @@
 import axios from 'axios'
 import { reactive } from 'vue'
+import { usePlayerFetch } from './api'
+
+const playerFetch = usePlayerFetch()
 
 const playerApi = reactive({
   config: {
-    apiPathBySid: 'http://localhost:8080/store/cloud/'
+    apiPathBySid: playerFetch.path
   },
 
   state: {
