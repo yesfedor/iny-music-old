@@ -3,21 +3,21 @@
     <app-banner-auth v-if="!isAuth" class="the-player__banner"></app-banner-auth>
     <div v-else class="the-player__wrapper">
       <div class="the-player__info-bar" @click="overlayMobileToggle()">
-        <img class="the-player__poster ratio ration1x1" :src="song.posterUrl">
+        <img class="the-player__poster ratio ration1x1" src="">
         <div class="the-player__info-text">
           <router-link
-            :to="{ name: 'Playlist', params: { playlistId: song.playlistId }}"
+            :to="{ name: 'Playlist', params: { playlistId: 1 }}"
             class="the-player__title text-truncate"
             @click.stop
           >
-            {{ song.title }}
+            zxc zxc
           </router-link>
           <router-link
-            :to="{ name: 'Artist', params: { artistId: author.id }}"
+            :to="{ name: 'Artist', params: { artistId: 1 }}"
             class="the-player__author text-truncate"
             @click.stop
           >
-            {{ author.name }} {{ author.surname }}
+            asd asd
           </router-link>
         </div>
         <i class="the-player__like far fa-heart"></i>
@@ -27,10 +27,8 @@
           <i class="the-player__manage-icon the-player__manage-icon_random fas fa-random"></i>
           <i class="the-player__manage-icon fas fa-step-backward"></i>
           <i
-            :class="playButtonIcon"
-            class="the-player__manage-icon the-player__manage-icon_play fas fa-lg"
-            @click="togglePlay"
-          ></i>
+            class="the-player__manage-icon the-player__manage-icon_play fas fa-play fa-lg"
+          />
           <i class="the-player__manage-icon fas fa-step-forward"></i>
           <i class="the-player__manage-icon the-player__manage-icon_redo fas fa-redo"></i>
         </div>
@@ -80,24 +78,9 @@ export default {
     const playerApi = usePlayerApi()
     playerApi.initial()
 
-    playerApi.importSongBySid(2)
-
-    const author = computed(() => playerApi.state.currentSong.authorData)
-    const song = computed(() => playerApi.state.currentSong.songData)
-    const playButtonIcon = computed(() => {
-      return playerApi.playerState ? 'fa-pause' : 'fa-play'
-    })
-    const togglePlay = () => {
-      playerApi.togglePlay()
-    }
-
     return {
       overlayMobileToggle,
       isOverlayMobileOpen,
-      author,
-      song,
-      playButtonIcon,
-      togglePlay,
       isAuth,
       user
     }

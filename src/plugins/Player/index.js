@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { reactive } from 'vue'
 import { usePlayerFetch } from './api'
 
@@ -6,24 +5,10 @@ const playerFetch = usePlayerFetch()
 
 const playerApi = reactive({
   config: {
-    apiPathBySid: playerFetch.path
+    ...playerFetch
   },
 
-  state: {
-    currentSong: {
-      authorData: {
-        id: 0,
-        name: '',
-        surname: ''
-      },
-      songData: {
-        id: 0,
-        playlistId: 0,
-        title: '',
-        posterUrl: ''
-      }
-    }
-  },
+  state: {},
 
   $player: document.createElement('audio'),
   playerState: false,
@@ -46,17 +31,7 @@ const playerApi = reactive({
     this.playerState = true
     this.$player.play()
   },
-  forward () {},
-
-  fetch () {},
-
-  async importSongBySid (sid) {
-    const currentSongData = await axios.get(this.config.apiPathBySid + `id${sid}.json`)
-    this.state.currentSong.authorData = currentSongData.data.author
-    this.state.currentSong.songData = currentSongData.data.song
-    this.$player.setAttribute('src', this.config.apiPathBySid + `id${sid}.mp3`)
-    this.$player.setAttribute('preload', 'auto')
-  }
+  forward () {}
 })
 
 export default function usePlayerApi () {

@@ -59,14 +59,10 @@ export default {
         localStorage.setItem('asideWidth', event.clientX + 'px')
       }
     }
-    const sizerDrop = (event) => {
-      console.log('123123')
-    }
 
     return {
       asideWidth,
       sizerDrag,
-      sizerDrop,
       createPlaylist
     }
   }
