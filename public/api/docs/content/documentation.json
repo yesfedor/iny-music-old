@@ -1,0 +1,42 @@
+{
+  "project-name": "INY Music",
+  "project-version": "0.5.0",
+  "project-path-api": "//music.iny.su/api/",
+  "project-path": "//music.iny.su/",
+  "project-path-content": {
+    "main": ["main.md"]
+  },
+  "content": {
+    "versions": {
+      "1.0": {
+        "label": "v1.0",
+        "filename": ["1_0"],
+        "objects": {
+          "user": {
+            "label": "User",
+            "filename": ["user"],
+            "methods": {
+              "login": {
+                "label": "login",
+                "filename": ["login"]
+              }
+            }
+          },
+          "song": {
+            "label": "Song",
+            "filename": ["song"],
+            "methods": {
+              "getSong": {
+                "label": "getSong",
+                "filename": ["getSong"]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "vars": {
+    "name": "Прос"
+  }
+}
