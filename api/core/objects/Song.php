@@ -1,7 +1,6 @@
 <?php
 
-function SongGetArtistsOnFeaturing(int $fid, int $aid)
-{
+function SongGetArtistsOnFeaturing(int $fid, int $aid) {
   $query = "SELECT aid, position FROM Feat WHERE fid = :fid AND aid != :aid";
   $var = [
     ':fid' => $fid,
@@ -16,8 +15,7 @@ function SongGetArtistsOnFeaturing(int $fid, int $aid)
   return $artists;
 }
 
-function SongGetArtistForSong(int $aid)
-{
+function SongGetArtistForSong(int $aid) {
   $query = "SELECT name, suranme, altname FROM Artists WHERE aid = :aid";
   $var = [
     ':aid' => $aid
@@ -26,8 +24,7 @@ function SongGetArtistForSong(int $aid)
   return $artist;
 }
 
-function SongGetBySid(int $sid)
-{
+function SongGetBySid(int $sid) {
   $query = "SELECT aid, fid, title, subtitle, explicit, duration, uri, img_1024 FROM Song WHERE sid = :sid";
   $var = [
     ':sid' => $sid
@@ -46,4 +43,25 @@ function SongGetBySid(int $sid)
   ];
 
   return $data;
+}
+
+function SongGetQueueCurrent (string $jwt) {
+  if (!UserJwtIsValid($jwt)) return [];
+  $user = UserJwtDecode($jwt)['data'];
+  
+  if (!$user['uid']) return [];
+
+  $query = "SELECT id, sid, time FROM SongQueueCurrent WHERE uid = :uid";
+  $var = [
+    ':uid' => $user['uid']
+  ];
+  $queueCurrent = dbGetOne($query, $var);
+
+  if (!$queueCurrent['id']) return [];
+
+  $songData = SongGetBySid($queueCurrent['sid']);
+  
+  $queueCurrent = array_merge($queueCurrent, $songData);
+
+  return $queueCurrent;
 }

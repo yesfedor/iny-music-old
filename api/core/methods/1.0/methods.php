@@ -304,6 +304,24 @@ $methods = [
         'default' => 1,
       ]
     ]
+  ],
+  'song.getQueueCurrent' => [
+    'in_active' => true,
+    'beforeMethods' => ['User.online'],
+    'objects' => ['Song', 'User', 'Device'],
+    'title' => 'Song',
+    'detail' => 'Get song informnation',
+    'link' => '/getSong',
+    'props' => [
+      'jwt' => [
+        'required' => true,
+        'type' => 'String'
+      ],
+      'client_id' => [
+        'required' => true,
+        'type' => 'String'
+      ]
+    ]
   ]
 ];
 

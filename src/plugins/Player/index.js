@@ -1,13 +1,7 @@
 import { reactive } from 'vue'
-import { API_FETCH } from '../../api/fetch'
-import { usePlayerFetch } from './api'
-
-const playerFetch = usePlayerFetch()
 
 const playerApi = reactive({
-  config: {
-    ...playerFetch
-  },
+  config: {},
 
   state: {},
 
@@ -32,18 +26,7 @@ const playerApi = reactive({
     this.playerState = true
     this.$player.play()
   },
-  forward () {},
-
-  async getSongBySid (sid) {
-    return await API_FETCH({
-      crud: 'GET',
-      version: '1.0',
-      method: 'song.getBySid',
-      args: {
-        sid: sid
-      }
-    })
-  }
+  forward () {}
 })
 
 export default function usePlayerApi () {

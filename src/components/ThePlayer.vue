@@ -1,5 +1,5 @@
 <template>
-  <section class="the-player">
+  <section :class="{'the-player_disabled': isPlayerActive}" class="the-player">
     <app-banner-auth v-if="!isAuth" class="the-player__banner"></app-banner-auth>
     <div v-else class="the-player__wrapper">
       <div class="the-player__info-bar" @click="overlayMobileToggle()">
@@ -10,14 +10,12 @@
             class="the-player__title text-truncate"
             @click.stop
           >
-            zxc zxc
           </router-link>
           <router-link
             :to="{ name: 'Artist', params: { artistId: 1 }}"
             class="the-player__author text-truncate"
             @click.stop
           >
-            asd asd
           </router-link>
         </div>
         <i class="the-player__like far fa-heart"></i>
@@ -57,6 +55,7 @@ import { computed, ref } from '@vue/runtime-core'
 import { useStore } from 'vuex'
 import { usePosition } from '../plugins/hooks'
 import usePlayerApi from '../plugins/Player'
+import { usePlayerFetch } from '../plugins/Player/api'
 export default {
   name: 'ThePlayer',
   components: {
@@ -64,6 +63,7 @@ export default {
     ThePlayerOverlayMobile
   },
   setup () {
+    const isPlayerActive = ref(false)
     const $position = usePosition()
     const store = useStore()
     const isAuth = computed(() => store.getters.isAuth)
@@ -75,15 +75,21 @@ export default {
       }
     }
 
+    const playerFetch = usePlayerFetch()
     const playerApi = usePlayerApi()
     playerApi.initial()
 
-    const song = playerApi.getSongBySid(2)
-    song.then(data => {
+    const cur = playerFetch.getQueueCurrent()
+    cur.then(data => {
       console.log(data)
     })
+    // const songData = playerApi.getSongBySid(2)
+    // song.then(data => {
+    //   console.log(data)
+    // })
 
     return {
+      isPlayerActive,
       overlayMobileToggle,
       isOverlayMobileOpen,
       isAuth,
@@ -144,6 +150,7 @@ html.user-auth-false {
   font-size: 0.8rem;
   text-decoration: none;
 }
+
 .the-player__author {
   color: var(--the-player-color);
   font-weight: 600;
@@ -218,7 +225,7 @@ html.user-auth-false {
   background-color: var(--the-player-line);
 }
 .the-player__manage-timeline::before {
-  width: 50%;
+  width: 0%;
   content: " ";
   position: absolute;
   left: 0;
@@ -268,7 +275,7 @@ html.user-auth-false {
   background-color: var(--the-player-line);
 }
 .the-player__tools-bar-volume::before {
-  width: 50%;
+  width: 0%;
   content: " ";
   position: absolute;
   left: 0;
@@ -295,6 +302,11 @@ html.user-auth-false {
 }
 .the-player__tools-bar-volume:hover::after {
   opacity: 1;
+}
+
+.the-player_disabled > .the-player__title, .the-player__author,
+.the-player__like, .the-player__manage-time-current, .the-player__manage-time-duration {
+  opacity: 0;
 }
 
 @media (max-width: 767.98px) {

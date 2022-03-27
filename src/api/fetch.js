@@ -32,7 +32,7 @@ export async function API_FETCH (
   if (isClientId) {
     const key = Api.config.localStorageName.clientId
     clientId = localStorage.getItem(key)
-    getQuery.clientId = clientId
+    getQuery[key] = clientId
   }
 
   onStart()
