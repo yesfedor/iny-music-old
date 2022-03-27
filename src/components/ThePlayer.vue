@@ -78,6 +78,9 @@ export default {
     const playerApi = usePlayerApi()
     playerApi.initial()
 
+    const song = playerApi.getSongBySid(1)
+    console.log(song)
+
     return {
       overlayMobileToggle,
       isOverlayMobileOpen,

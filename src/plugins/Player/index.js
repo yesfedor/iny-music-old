@@ -35,7 +35,7 @@ const playerApi = reactive({
   forward () {},
 
   getSongBySid (sid) {
-    const song = API_FETCH({
+    return API_FETCH({
       crud: 'GET',
       version: '1.0',
       method: 'song.getSong',
@@ -43,7 +43,6 @@ const playerApi = reactive({
         sid: sid
       }
     })
-    console.log(song)
   }
 })
 
