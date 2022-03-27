@@ -7,8 +7,8 @@ var configFront = {
   password: 'asd486982asd',
   host: 'vh370.timeweb.ru',
   port: 21,
-  localRoot: 'D:/development/project/myapp/iny-music/dist/',
-  remoteRoot: 'music-app/public_html/',
+  localRoot: 'E:/development/iny-music/dist/',
+  remoteRoot: 'spotyfree/public_html/',
   // include: ["*", "**/*"],      // this would upload everything except dot files
   include: ['*', '**/*'],
   // e.g. exclude sourcemaps, and ALL files in node_modules (including dot files)

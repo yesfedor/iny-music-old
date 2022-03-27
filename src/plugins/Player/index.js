@@ -1,37 +1,50 @@
-import axios from 'axios'
+import { reactive } from 'vue'
+import { API_FETCH } from '../../api/fetch'
+import { usePlayerFetch } from './api'
 
-const playerApi = {
+const playerFetch = usePlayerFetch()
+
+const playerApi = reactive({
   config: {
-    apiPathBySid: 'http://localhost:8080/store/cloud/'
+    ...playerFetch
   },
 
-  state: {
-    currentSong: {
-      authorData: {},
-      songData: {}
-    }
-  },
+  state: {},
+
+  $player: document.createElement('audio'),
+  playerState: false,
 
   initial () {},
 
   toggleFavorite () {},
   toggleRandom () {},
-  togglePlay () {},
+  togglePlay () {
+    this.playerState ? this.pause() : this.play()
+  },
   toggleRedo () {},
 
   backward () {},
-  pause () {},
-  play () {},
+  pause () {
+    this.playerState = false
+    this.$player.pause()
+  },
+  play () {
+    this.playerState = true
+    this.$player.play()
+  },
   forward () {},
-
-  fetch () {},
-
-  async importSongBySid (sid) {
-    const currentSongData = await axios.get(this.config.apiPathBySid + `id${sid}.json`)
-    this.state.currentSong.authorData = currentSongData.data.author
-    this.state.currentSong.songData = currentSongData.data.song
+  getSongBySid (sid) {
+    const song = API_FETCH({
+      crud: 'GET',
+      version: '1.0',
+      method: 'song.getSong',
+      args: {
+        sid: sid
+      }
+    })
+    console.log(song)
   }
-}
+})
 
 export default function usePlayerApi () {
   return playerApi

@@ -280,6 +280,30 @@ $methods = [
         'default' => 0,
       ]
     ]
+  ],
+  'shell.setGenre' => [
+    'in_active' => true,
+    'beforeMethods' => [],
+    'objects' => ['Shell'],
+    'title' => 'Time()',
+    'detail' => 'Get server time',
+    'link' => '/time',
+    'props' => []
+  ],
+  'song.getSong' => [
+    'in_active' => true,
+    'beforeMethods' => [],
+    'objects' => ['Song'],
+    'title' => 'Song',
+    'detail' => 'Get song informnation',
+    'link' => '/getSong',
+    'props' => [
+      'sid' => [
+        'required' => true,
+        'type' => 'Int',
+        'default' => 1,
+      ]
+    ]
   ]
 ];
 

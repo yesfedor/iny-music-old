@@ -3,21 +3,21 @@
     <app-banner-auth v-if="!isAuth" class="the-player__banner"></app-banner-auth>
     <div v-else class="the-player__wrapper">
       <div class="the-player__info-bar" @click="overlayMobileToggle()">
-        <img class="the-player__poster ratio ration1x1" :src="song.posterUrl">
+        <img class="the-player__poster ratio ration1x1" src="">
         <div class="the-player__info-text">
           <router-link
-            :to="{ name: 'Playlist', params: { playlistId: song.playlistId }}"
+            :to="{ name: 'Playlist', params: { playlistId: 1 }}"
             class="the-player__title text-truncate"
             @click.stop
           >
-            {{ song.title }}
+            zxc zxc
           </router-link>
           <router-link
-            :to="{ name: 'Artist', params: { artistId: author.id }}"
+            :to="{ name: 'Artist', params: { artistId: 1 }}"
             class="the-player__author text-truncate"
             @click.stop
           >
-            {{ author.name }} {{ author.surname }}
+            asd asd
           </router-link>
         </div>
         <i class="the-player__like far fa-heart"></i>
@@ -26,7 +26,9 @@
         <div class="the-player__manage-tools">
           <i class="the-player__manage-icon the-player__manage-icon_random fas fa-random"></i>
           <i class="the-player__manage-icon fas fa-step-backward"></i>
-          <i class="the-player__manage-icon the-player__manage-icon_play fas fa-pause fa-lg"></i>
+          <i
+            class="the-player__manage-icon the-player__manage-icon_play fas fa-play fa-lg"
+          />
           <i class="the-player__manage-icon fas fa-step-forward"></i>
           <i class="the-player__manage-icon the-player__manage-icon_redo fas fa-redo"></i>
         </div>
@@ -62,9 +64,6 @@ export default {
     ThePlayerOverlayMobile
   },
   setup () {
-    const playerApi = usePlayerApi()
-    playerApi.initial()
-    playerApi.importSongBySid(1)
     const $position = usePosition()
     const store = useStore()
     const isAuth = computed(() => store.getters.isAuth)
@@ -75,14 +74,15 @@ export default {
         isOverlayMobileOpen.value = !isOverlayMobileOpen.value
       }
     }
-    const author = ref(playerApi.state.currentSong.authorData)
-    const song = ref(playerApi.state.currentSong.songData)
+
+    const playerApi = usePlayerApi()
+    playerApi.initial()
+
+    playerApi.getSongBySid(1)
 
     return {
       overlayMobileToggle,
       isOverlayMobileOpen,
-      author,
-      song,
       isAuth,
       user
     }
@@ -206,6 +206,44 @@ html.user-auth-false {
   border-radius: 5px;
   background-color: var(--the-player-line);
 }
+
+.the-player__manage-timeline {
+  width: calc(100% - 1rem);
+  position: relative;
+  height: 5px;
+  border-radius: 5px;
+  background-color: var(--the-player-line);
+}
+.the-player__manage-timeline::before {
+  width: 50%;
+  content: " ";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 5px;
+  background-color: var(--the-player-color);
+}
+.the-player__manage-timeline:hover::before {
+  background-color: var(--the-player-primary);
+}
+.the-player__manage-timeline::after {
+  opacity: 0;
+  margin-left: calc(50% - 6px);
+  content: " ";
+  position: absolute;
+  left: 0;
+  top: -4px;
+  bottom: 0;
+  height: 12px;
+  width: 12px;
+  border-radius: 200%;
+  background-color: var(--the-player-color-hightlight);
+}
+.the-player__manage-timeline:hover::after {
+  opacity: 1;
+}
+
 .the-player__tools-bar {
   display: flex;
   align-items: center;
@@ -219,10 +257,41 @@ html.user-auth-false {
   font-size: 0.95rem;
 }
 .the-player__tools-bar-volume {
+  position: relative;
   width: calc(20% - 1rem);
-  height: 5px;
-  border-radius: 5px;
+  min-width: 80px;
+  height: 4px;
+  border-radius: 6px;
   background-color: var(--the-player-line);
+}
+.the-player__tools-bar-volume::before {
+  width: 50%;
+  content: " ";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 5px;
+  background-color: var(--the-player-color);
+}
+.the-player__tools-bar-volume:hover::before {
+  background-color: var(--the-player-primary);
+}
+.the-player__tools-bar-volume::after {
+  opacity: 0;
+  margin-left: calc(50% - 6px);
+  content: " ";
+  position: absolute;
+  left: 0;
+  top: -4px;
+  bottom: 0;
+  height: 12px;
+  width: 12px;
+  border-radius: 200%;
+  background-color: var(--the-player-color-hightlight);
+}
+.the-player__tools-bar-volume:hover::after {
+  opacity: 1;
 }
 
 @media (max-width: 767.98px) {
