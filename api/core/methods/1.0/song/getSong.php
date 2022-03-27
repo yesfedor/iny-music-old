@@ -1,2 +1,2 @@
 <?php
-$responce = GetSong($args['sid']);
+$responce = SongGetSong($args['sid']);

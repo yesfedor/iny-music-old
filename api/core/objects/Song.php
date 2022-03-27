@@ -1,6 +1,6 @@
 <?php
 
-function GetArtistsOnFeaturing (int $fid) {
+function SongGetArtistsOnFeaturing (int $fid) {
   $query = "SELECT `aid`, `position` FROM `Feat` WHERE fid = :fid";
   $var = [
     ':fid' => $fid
@@ -8,13 +8,13 @@ function GetArtistsOnFeaturing (int $fid) {
 
   $artists = dbGetAll($query, $var);
   for ($index = 0; $index < count($artists); $index++){
-    $artists[$index]['artist'] = GetArtistForSong($artists[$index]['aid']);
+    $artists[$index]['artist'] = SongGetArtistForSong($artists[$index]['aid']);
   }
   
   return $artists;
 }
 
-function GetArtistForSong (int $aid) {
+function SongGetArtistForSong (int $aid) {
   $query = "SELECT `name`, `suranme`, `altname` FROM `Artists` WHERE aid = :aid";
   $var = [
     ':aid' => $aid 
@@ -23,7 +23,7 @@ function GetArtistForSong (int $aid) {
   return $artist;
 }
 
-function GetSong (int $sid) {
+function SongGetSong (int $sid) {
   $query = "SELECT `aid`, `fid`, `title`, `subtitle`, `explicit`, `duration`, `uri`, `img_1024`FROM `Song` WHERE sid = :sid"; 
   $var = [
     ':sid' => $sid
@@ -31,8 +31,8 @@ function GetSong (int $sid) {
   $song = dbGetOne($query, $var);
 
   $data = [
-    'artist' => GetArtistForSong(intval($song['aid'])),
-    'featuring' => GetArtistsOnFeaturing(intval($song['fid'])),
+    'artist' => SongGetArtistForSong(intval($song['aid'])),
+    'featuring' => SongGetArtistsOnFeaturing(intval($song['fid'])),
     'title' => $song['title'],
     'subtitle' => $song['subtitle'],
     'explicit' => $song['explicit'],
