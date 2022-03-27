@@ -1,4 +1,5 @@
 import { reactive } from 'vue'
+import { API_FETCH } from '../../api/fetch'
 import { usePlayerFetch } from './api'
 
 const playerFetch = usePlayerFetch()
@@ -31,6 +32,19 @@ const playerApi = reactive({
     this.playerState = true
     this.$player.play()
   },
+  forward () {},
+  getSongBySid (sid) {
+    const song = API_FETCH({
+      crud: 'GET',
+      version: '1.0',
+      method: 'song.getSong',
+      args: {
+        sid: sid
+      }
+    })
+    console.log(song)
+  },
+
   forward () {}
 })
 
