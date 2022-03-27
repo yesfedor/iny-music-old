@@ -43,7 +43,9 @@ const playerApi = reactive({
       }
     })
     console.log(song)
-  }
+  },
+
+  forward () {}
 })
 
 export default function usePlayerApi () {
