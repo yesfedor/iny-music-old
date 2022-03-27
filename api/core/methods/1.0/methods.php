@@ -290,7 +290,7 @@ $methods = [
     'link' => '/time',
     'props' => []
   ],
-  'song.getSong' => [
+  'song.getBySid' => [
     'in_active' => true,
     'beforeMethods' => [],
     'objects' => ['Song'],

@@ -34,11 +34,11 @@ const playerApi = reactive({
   },
   forward () {},
 
-  getSongBySid (sid) {
-    return API_FETCH({
+  async getSongBySid (sid) {
+    return await API_FETCH({
       crud: 'GET',
       version: '1.0',
-      method: 'song.getSong',
+      method: 'song.getBySid',
       args: {
         sid: sid
       }

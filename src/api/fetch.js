@@ -12,6 +12,7 @@ export async function API_FETCH (
     get = {},
     isJwt = false,
     isClientId = false,
+    isHeader = false,
     onStart = () => {},
     onEnd = () => {}
   }
@@ -46,6 +47,11 @@ export async function API_FETCH (
       result = await axios.post(path, post)
       break
   }
+
+  if (!isHeader) {
+    result = result.data
+  }
+
   onEnd(result)
 
   return result
