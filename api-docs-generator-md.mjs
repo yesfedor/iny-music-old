@@ -1,5 +1,5 @@
 import fs from 'fs'
-const jsonDocumentation = fs.readFileSync('./public/content/documentation.json', 'utf-8')
+const jsonDocumentation = fs.readFileSync('./public/api/docs/content/documentation.json', 'utf-8')
 const documentation = JSON.parse(jsonDocumentation)
 
 function formatMdPath (path, page = 'Main', version = '', object = '') {
