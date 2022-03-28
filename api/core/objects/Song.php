@@ -63,5 +63,53 @@ function SongGetQueueCurrent (string $jwt) {
   
   $queueCurrent = array_merge($queueCurrent, $songData);
 
+  if (!count($queueCurrent)) return [];
+
   return $queueCurrent;
+}
+
+function SongGetPlayerSettings (string $jwt) {
+  if (!UserJwtIsValid($jwt)) return [];
+  $user = UserJwtDecode($jwt)['data'];
+  
+  if (!$user['uid']) return [];
+
+  $query = "SELECT uid, player_volume, player_shuffle, player_repeat FROM UserPlayerSettings WHERE uid = :uid";
+  $var = [
+    ':uid' => $user['uid']
+  ];
+  $settings = dbGetOne($query, $var);
+
+  if (!$settings) return [];
+
+  return $settings;
+}
+
+function SongSetPlayerSettings (string $jwt, int $player_volume, bool $player_shuffle, string $player_repeat) {
+  if (!UserJwtIsValid($jwt)) return [];
+  $user = UserJwtDecode($jwt)['data'];
+  
+  if (!$user['uid']) return [];
+
+  $repeat_set = ['no-repeat', 'repeat-queue', 'repeat-song'];
+  if (!in_array($player_repeat, $repeat_set, true)) return [];
+
+  $settings = SongGetPlayerSettings($jwt);
+
+  $var = [
+    ':player_volume' => $player_volume,
+    ':player_shuffle' => $player_shuffle,
+    ':player_repeat' => $player_repeat,
+    ':uid' => $user['uid']
+  ];
+  if (!$settings['uid']) {
+    $query = "INSERT INTO UserPlayerSettings (uid, player_volume, player_shuffle, player_repeat)".
+             "VALUES (:uid, :player_volume, :player_shuffle, :player_repeat)";
+  } else {
+    $query = "UPDATE UserPlayerSettings SET player_volume = :player_volume, player_shuffle = :player_shuffle, player_repeat = :player_repeat WHERE uid = :uid";
+  }
+
+  dbAddOne($query, $var);
+
+  return ['status' => true];
 }

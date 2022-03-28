@@ -1,21 +1,23 @@
 <template>
-  <section :class="{'the-player_disabled': isPlayerActive}" class="the-player">
+  <section :class="{'the-player_disabled': !isPlayerActive}" class="the-player">
     <app-banner-auth v-if="!isAuth" class="the-player__banner"></app-banner-auth>
     <div v-else class="the-player__wrapper">
       <div class="the-player__info-bar" @click="overlayMobileToggle()">
-        <img class="the-player__poster ratio ration1x1" src="">
+        <img class="the-player__poster ratio ration1x1" :src="playerApi.state.songQueueCurrent.img_1024">
         <div class="the-player__info-text">
           <router-link
             :to="{ name: 'Playlist', params: { playlistId: 1 }}"
             class="the-player__title text-truncate"
             @click.stop
           >
+            {{ playerApi.state.songQueueCurrent.title }}
           </router-link>
           <router-link
             :to="{ name: 'Artist', params: { artistId: 1 }}"
             class="the-player__author text-truncate"
             @click.stop
           >
+            {{ playerApi.state.songQueueCurrent.artist.altname ? playerApi.state.songQueueCurrent.artist.altname : playerApi.state.songQueueCurrent.artist.name + ' ' + playerApi.state.songQueueCurrent.artist.surname }}
           </router-link>
         </div>
         <i class="the-player__like far fa-heart"></i>
@@ -25,15 +27,17 @@
           <i class="the-player__manage-icon the-player__manage-icon_random fas fa-random"></i>
           <i class="the-player__manage-icon fas fa-step-backward"></i>
           <i
-            class="the-player__manage-icon the-player__manage-icon_play fas fa-play fa-lg"
+            class="the-player__manage-icon the-player__manage-icon_play fas fa-lg"
+            :class="playerApi.playerState ? playerApi.playerIcon.play : playerApi.playerIcon.pause"
+            @click="playerApi.togglePlay()"
           />
           <i class="the-player__manage-icon fas fa-step-forward"></i>
           <i class="the-player__manage-icon the-player__manage-icon_redo fas fa-redo"></i>
         </div>
         <div class="the-player__manage-time">
-          <span class="the-player__manage-time-current">0:00</span>
+          <span class="the-player__manage-time-current">{{ playerApi.state.songQueueCurrent.time }}</span>
           <div class="the-player__manage-timeline"></div>
-          <span class="the-player__manage-time-duration">90:00</span>
+          <span class="the-player__manage-time-duration">{{ playerApi.state.songQueueCurrent.duration }}</span>
         </div>
       </div>
       <div class="the-player__tools-bar">
@@ -51,11 +55,11 @@
 <script>
 import ThePlayerOverlayMobile from './ThePlayerOverlayMobile.vue'
 import AppBannerAuth from './AppBannerAuth.vue'
-import { computed, ref } from '@vue/runtime-core'
+import { computed, ref, watch } from '@vue/runtime-core'
 import { useStore } from 'vuex'
 import { usePosition } from '../plugins/hooks'
 import usePlayerApi from '../plugins/Player'
-import { usePlayerFetch } from '../plugins/Player/api'
+
 export default {
   name: 'ThePlayer',
   components: {
@@ -63,7 +67,7 @@ export default {
     ThePlayerOverlayMobile
   },
   setup () {
-    const isPlayerActive = ref(false)
+    const isPlayerActive = ref(0)
     const $position = usePosition()
     const store = useStore()
     const isAuth = computed(() => store.getters.isAuth)
@@ -75,20 +79,22 @@ export default {
       }
     }
 
-    const playerFetch = usePlayerFetch()
     const playerApi = usePlayerApi()
     playerApi.initial()
 
-    const cur = playerFetch.getQueueCurrent()
-    cur.then(data => {
-      console.log(data)
+    const playerState = computed(() => playerApi.state)
+
+    watch(playerApi.state, (state) => {
+      if (state.songQueueCurrent.id) {
+        isPlayerActive.value = 1
+      } else {
+        isPlayerActive.value = 0
+      }
     })
-    // const songData = playerApi.getSongBySid(2)
-    // song.then(data => {
-    //   console.log(data)
-    // })
 
     return {
+      playerState,
+      playerApi,
       isPlayerActive,
       overlayMobileToggle,
       isOverlayMobileOpen,
@@ -239,7 +245,7 @@ html.user-auth-false {
 }
 .the-player__manage-timeline::after {
   opacity: 0;
-  margin-left: calc(50% - 6px);
+  margin-left: calc(0% - 6px);
   content: " ";
   position: absolute;
   left: 0;
@@ -289,7 +295,7 @@ html.user-auth-false {
 }
 .the-player__tools-bar-volume::after {
   opacity: 0;
-  margin-left: calc(50% - 6px);
+  margin-left: calc(0% - 6px);
   content: " ";
   position: absolute;
   left: 0;
@@ -304,8 +310,11 @@ html.user-auth-false {
   opacity: 1;
 }
 
-.the-player_disabled > .the-player__title, .the-player__author,
-.the-player__like, .the-player__manage-time-current, .the-player__manage-time-duration {
+.the-player_disabled .the-player__title,
+.the-player_disabled .the-player__author,
+.the-player_disabled .the-player__like,
+.the-player_disabled .the-player__manage-time-current,
+.the-player_disabled .the-player__manage-time-duration {
   opacity: 0;
 }
 

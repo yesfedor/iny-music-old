@@ -315,11 +315,68 @@ $methods = [
     'props' => [
       'jwt' => [
         'required' => true,
-        'type' => 'String'
+        'type' => 'String',
+        'default' => '',
       ],
       'client_id' => [
         'required' => true,
-        'type' => 'String'
+        'type' => 'String',
+        'default' => ''
+      ]
+    ]
+  ],
+  'song.getPlayerSettings' => [
+    'in_active' => true,
+    'beforeMethods' => ['User.online'],
+    'objects' => ['Song', 'User', 'Device'],
+    'title' => 'Song',
+    'detail' => 'Get player settings',
+    'link' => '/getSettings',
+    'props' => [
+      'jwt' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => ''
+      ],
+      'client_id' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => ''
+      ]
+    ]
+  ],
+  'song.setPlayerSettings' => [
+    'in_active' => true,
+    'beforeMethods' => ['User.online'],
+    'objects' => ['Song', 'User', 'Device'],
+    'title' => 'Song',
+    'detail' => 'Get player settings',
+    'link' => '/getSettings',
+    'props' => [
+      'jwt' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => ''
+      ],
+      'client_id' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => ''
+      ],
+      'player_volume' => [
+        'required' => true,
+        'type' => 'Int',
+        'default' => 0
+      ],
+      'player_shuffle' => [
+        'required' => true,
+        'type' => 'Bool',
+        'default' => false
+      ],
+      'player_repeat' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => ''
       ]
     ]
   ]

@@ -19,6 +19,29 @@ const playerFetch = {
         sid: sid
       }
     })
+  },
+  async getPlayerSettings () {
+    return await API_FETCH({
+      crud: 'GET',
+      version: '1.0',
+      method: 'song.getPlayerSettings',
+      isJwt: true,
+      isClientId: true
+    })
+  },
+  async setPlayerSettings (playerVolume, playerShuffle, playerRepeat) {
+    return await API_FETCH({
+      crud: 'POST',
+      version: '1.0',
+      method: 'song.setPlayerSettings',
+      isJwt: true,
+      isClientId: true,
+      post: {
+        player_volume: playerVolume,
+        player_shuffle: playerShuffle,
+        player_repeat: playerRepeat
+      }
+    })
   }
 }
 
