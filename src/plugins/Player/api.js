@@ -42,6 +42,19 @@ const playerFetch = {
         player_repeat: playerRepeat
       }
     })
+  },
+  async setQueueCurrent (sid, time) {
+    return await API_FETCH({
+      crud: 'POST',
+      version: '1.0',
+      method: 'song.setQueueCurrent',
+      isJwt: true,
+      isClientId: true,
+      post: {
+        sid,
+        time
+      }
+    })
   }
 }
 

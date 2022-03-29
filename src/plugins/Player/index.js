@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { reactive } from 'vue'
 import { useStore } from 'vuex'
 import { usePlayerFetch } from './api'
@@ -14,6 +15,7 @@ const playerApi = reactive({
    */
   config: {
     modulePrefix: '[PlayerApi]: ',
+    saveTimeInterval: 5000,
     isLogger: false
   },
 
@@ -24,7 +26,7 @@ const playerApi = reactive({
     songQueue: {},
     songQueueCurrent: {
       artist: {
-        aid: '',
+        aid: 0,
         altname: '',
         name: '',
         surname: ''
@@ -60,6 +62,7 @@ const playerApi = reactive({
   playerCallback () {
     const onTimeUpdate = () => {
       this.state.songQueueCurrent.time = this.$player.currentTime
+      this._api_setQueueCurrent()
     }
     const onEnded = () => {
       this.logger('log', 'end song')
@@ -92,12 +95,14 @@ const playerApi = reactive({
     const isAuth = this.middlewareManager('isAuth')
     if (!isAuth) return false
 
+    this.api()
     this.playerCallback()
 
     playerFetch.getQueueCurrent().then(songQueueCurrent => {
       if (!songQueueCurrent?.id) return false
       this.state.songQueueCurrent = songQueueCurrent
       this.playerSetSrc(songQueueCurrent.song)
+      this.playerSetCurrentTime(songQueueCurrent.time)
     })
 
     playerFetch.getPlayerSettings().then(settings => {
@@ -105,6 +110,17 @@ const playerApi = reactive({
       this.state.settings = settings
       this.volumeChange(settings.player_volume)
     })
+  },
+
+  /**
+   * apis
+  */
+  api () {
+    this._api_setQueueCurrent = _.throttle(() => {
+      if (!this.playerState) return false
+      if (!(this.state.songQueueCurrent.sid && this.state.songQueueCurrent.time)) return false
+      playerFetch.setQueueCurrent(this.state.songQueueCurrent.sid, this.state.songQueueCurrent.time.toFixed(0))
+    }, this.config.saveTimeInterval)
   },
 
   /**

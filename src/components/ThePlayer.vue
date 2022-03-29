@@ -11,9 +11,12 @@
             @click.stop
           >
             {{ playerApi.state.songQueueCurrent.title }}
+            <span v-show="playerApi.state.songQueueCurrent.subtitle" class="the-player__subtitle">
+              {{ playerApi.state.songQueueCurrent.subtitle }}
+            </span>
           </router-link>
           <router-link
-            :to="{ name: 'Artist', params: { artistId: 1 }}"
+            :to="{ name: 'Artist', params: { artistId: playerApi.state.songQueueCurrent.artist.aid }}"
             class="the-player__author text-truncate"
             @click.stop
           >
@@ -36,14 +39,14 @@
         </div>
         <div class="the-player__manage-time">
           <span class="the-player__manage-time-current">{{ songFormatedTime }}</span>
-          <div class="the-player__manage-timeline"></div>
+          <div @click="timelineClick" class="the-player__manage-timeline"></div>
           <span class="the-player__manage-time-duration">{{ songFormatedDuration }}</span>
         </div>
       </div>
       <div class="the-player__tools-bar">
         <i class="the-player__tools-bar-icon fas fa-stream"></i>
         <i class="the-player__tools-bar-icon fas fa-volume-up"></i>
-        <div class="the-player__tools-bar-volume"></div>
+        <div @wheel="volumeWheel" @click="volumeClick" class="the-player__tools-bar-volume"></div>
       </div>
     </div>
     <div class="the-player-plugin">
@@ -100,6 +103,40 @@ export default {
     const timelineDuration = computed(() => computedWidthLine(playerApi.state.songQueueCurrent.time, playerApi.state.songQueueCurrent.duration))
     const timelineVolume = computed(() => computedWidthLine(playerApi.state.settings.player_volume, 100))
 
+    const timelineClick = (event) => {
+      const lineWidth = event.srcElement.offsetWidth
+      const clickWidth = event.offsetX
+      const clickPersent = clickWidth / lineWidth
+      const timeline = playerApi.state.songQueueCurrent.duration * clickPersent
+      playerApi.playerSetCurrentTime(timeline)
+    }
+
+    const volumeClick = (event) => {
+      const lineWidth = event.srcElement.offsetWidth
+      const clickWidth = event.offsetX
+      const clickPersent = clickWidth / lineWidth
+      const volume = (100 * clickPersent).toFixed(0)
+      playerApi.volumeChange(volume)
+    }
+
+    const volumeWheel = (event) => {
+      const setVolume = (volumeOffset) => {
+        if (volumeOffset > 100) return 100
+        if (volumeOffset < 0) return 0
+        return volumeOffset
+      }
+      const step = 5
+
+      let volume = playerApi.state.settings.player_volume
+      if (event.deltaY > 0) {
+        volume = setVolume(volume - step)
+      } else {
+        volume = setVolume(volume + step)
+      }
+
+      playerApi.volumeChange(volume)
+    }
+
     watch(playerApi.state, (state) => {
       if (state.songQueueCurrent.id) {
         isPlayerActive.value = 1
@@ -109,6 +146,9 @@ export default {
     })
 
     return {
+      volumeWheel,
+      volumeClick,
+      timelineClick,
       timelineDuration,
       timelineVolume,
       songFormatedTime,
@@ -179,6 +219,9 @@ html.user-auth-false {
   font-size: 0.8rem;
   text-decoration: none;
 }
+.the-player__subtitle {
+  color: var(--the-player-color);
+}
 .the-player__author {
   color: var(--the-player-color);
   font-weight: 600;
@@ -248,6 +291,7 @@ html.user-auth-false {
   height: 5px;
   border-radius: 5px;
   background-color: var(--the-player-line);
+  user-select: none;
 }
 
 .the-player__manage-timeline {
@@ -282,6 +326,7 @@ html.user-auth-false {
   width: 12px;
   border-radius: 200%;
   background-color: var(--the-player-color-hightlight);
+  -webkit-user-drag: element;
 }
 .the-player__manage-timeline:hover::after {
   opacity: 1;
@@ -353,7 +398,7 @@ html.user-auth-false {
     width: 100%;
   }
   .the-player__poster {
-    width: var(--player-height);
+    width: calc(var(--player-height) - 2.5px);
   }
   .the-player__info-bar {
     padding: 0.25rem 1.5rem 0.25rem 0;

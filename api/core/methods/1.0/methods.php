@@ -325,6 +325,36 @@ $methods = [
       ]
     ]
   ],
+  'song.setQueueCurrent' => [
+    'in_active' => true,
+    'beforeMethods' => ['User.online'],
+    'objects' => ['Song', 'User', 'Device'],
+    'title' => 'Song',
+    'detail' => 'Get song informnation',
+    'link' => '/getSong',
+    'props' => [
+      'jwt' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => '',
+      ],
+      'client_id' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => ''
+      ],
+      'sid' => [
+        'required' => true,
+        'type' => 'Int',
+        'default' => 1
+      ],
+      'time' => [
+        'required' => false,
+        'type' => 'Int',
+        'default' => 0
+      ],
+    ]
+  ],
   'song.getPlayerSettings' => [
     'in_active' => true,
     'beforeMethods' => ['User.online'],
@@ -364,7 +394,7 @@ $methods = [
         'default' => ''
       ],
       'player_volume' => [
-        'required' => true,
+        'required' => false,
         'type' => 'Int',
         'default' => 0
       ],

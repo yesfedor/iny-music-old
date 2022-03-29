@@ -1,6 +1,7 @@
 <?php
 
-function SongGetArtistsOnFeaturing(int $fid, int $aid) {
+function SongGetArtistsOnFeaturing(int $fid, int $aid)
+{
   $query = "SELECT aid, position FROM Feat WHERE fid = :fid AND aid != :aid";
   $var = [
     ':fid' => $fid,
@@ -16,7 +17,8 @@ function SongGetArtistsOnFeaturing(int $fid, int $aid) {
   return $artists;
 }
 
-function SongGetArtistForSong(int $aid) {
+function SongGetArtistForSong(int $aid)
+{
   $query = "SELECT aid, name, suranme, altname FROM Artists WHERE aid = :aid";
   $var = [
     ':aid' => $aid
@@ -25,7 +27,8 @@ function SongGetArtistForSong(int $aid) {
   return $artist;
 }
 
-function SongGetBySid(int $sid) {
+function SongGetBySid(int $sid)
+{
   $query = "SELECT aid, fid, title, subtitle, explicit, duration, uri, img_1024 FROM Song WHERE sid = :sid";
   $var = [
     ':sid' => $sid
@@ -46,13 +49,14 @@ function SongGetBySid(int $sid) {
   return $data;
 }
 
-function SongGetQueueCurrent (string $jwt) {
+function SongGetQueueCurrent(string $jwt)
+{
   if (!UserJwtIsValid($jwt)) return [];
   $user = UserJwtDecode($jwt)['data'];
-  
+
   if (!$user['uid']) return [];
 
-  $query = "SELECT id, sid, time FROM SongQueueCurrent WHERE uid = :uid";
+  $query = "SELECT id, uid, sid, time FROM SongQueueCurrent WHERE uid = :uid";
   $var = [
     ':uid' => $user['uid']
   ];
@@ -61,7 +65,7 @@ function SongGetQueueCurrent (string $jwt) {
   if (!$queueCurrent['id']) return [];
 
   $songData = SongGetBySid($queueCurrent['sid']);
-  
+
   $queueCurrent = array_merge($queueCurrent, $songData);
 
   if (!count($queueCurrent)) return [];
@@ -69,10 +73,42 @@ function SongGetQueueCurrent (string $jwt) {
   return $queueCurrent;
 }
 
-function SongGetPlayerSettings (string $jwt) {
+function SongSetQueueCurrent(string $jwt, int $sid = 1, int $time = 0)
+{
   if (!UserJwtIsValid($jwt)) return [];
   $user = UserJwtDecode($jwt)['data'];
-  
+
+  if (!$user['uid']) return [];
+
+  $queueCurrent = SongGetQueueCurrent($jwt);
+
+  if ($user['uid'] !== $queueCurrent['uid']) return [];
+
+  $var = [
+    ':uid' => $user['uid'],
+    ':sid' => $sid,
+    ':time' => $time,
+    ':updated_at' => time()
+  ];
+
+  if (!$queueCurrent['id']) {
+    $query = "INSERT INTO SongQueueCurrent (id, uid, sid, time, updated_at, created_at)" .
+      "VALUES (NULL, :uid, :sid, :time, :updated_at, :created_at)";
+    $var[':created_at'] = time();
+  } else {
+    $query = "UPDATE SongQueueCurrent SET sid = :sid, time = :time, updated_at = :updated_at WHERE uid = :uid";
+  }
+
+  dbAddOne($query, $var);
+
+  return ['status' => true];
+}
+
+function SongGetPlayerSettings(string $jwt)
+{
+  if (!UserJwtIsValid($jwt)) return [];
+  $user = UserJwtDecode($jwt)['data'];
+
   if (!$user['uid']) return [];
 
   $query = "SELECT uid, player_volume, player_shuffle, player_repeat FROM UserPlayerSettings WHERE uid = :uid";
@@ -86,10 +122,11 @@ function SongGetPlayerSettings (string $jwt) {
   return $settings;
 }
 
-function SongSetPlayerSettings (string $jwt, int $player_volume, bool $player_shuffle, string $player_repeat) {
+function SongSetPlayerSettings(string $jwt, int $player_volume, bool $player_shuffle, string $player_repeat)
+{
   if (!UserJwtIsValid($jwt)) return [];
   $user = UserJwtDecode($jwt)['data'];
-  
+
   if (!$user['uid']) return [];
 
   $repeat_set = ['no-repeat', 'repeat-queue', 'repeat-song'];
@@ -104,8 +141,8 @@ function SongSetPlayerSettings (string $jwt, int $player_volume, bool $player_sh
     ':uid' => $user['uid']
   ];
   if (!$settings['uid']) {
-    $query = "INSERT INTO UserPlayerSettings (uid, player_volume, player_shuffle, player_repeat)".
-             "VALUES (:uid, :player_volume, :player_shuffle, :player_repeat)";
+    $query = "INSERT INTO UserPlayerSettings (uid, player_volume, player_shuffle, player_repeat)" .
+      "VALUES (:uid, :player_volume, :player_shuffle, :player_repeat)";
   } else {
     $query = "UPDATE UserPlayerSettings SET player_volume = :player_volume, player_shuffle = :player_shuffle, player_repeat = :player_repeat WHERE uid = :uid";
   }
