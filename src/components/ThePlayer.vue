@@ -17,7 +17,7 @@
             class="the-player__author text-truncate"
             @click.stop
           >
-            {{ playerApi.state.songQueueCurrent.artist.altname ? playerApi.state.songQueueCurrent.artist.altname : playerApi.state.songQueueCurrent.artist.name + ' ' + playerApi.state.songQueueCurrent.artist.surname }}
+            {{ authorTitle }}
           </router-link>
         </div>
         <i class="the-player__like far fa-heart"></i>
@@ -35,9 +35,9 @@
           <i class="the-player__manage-icon the-player__manage-icon_redo fas fa-redo"></i>
         </div>
         <div class="the-player__manage-time">
-          <span class="the-player__manage-time-current">{{ playerApi.state.songQueueCurrent.formatedPlayableTime }}</span>
+          <span class="the-player__manage-time-current">{{ songFormatedTime }}</span>
           <div class="the-player__manage-timeline"></div>
-          <span class="the-player__manage-time-duration">{{ playerApi.state.songQueueCurrent.formatedDurationTime }}</span>
+          <span class="the-player__manage-time-duration">{{ songFormatedDuration }}</span>
         </div>
       </div>
       <div class="the-player__tools-bar">
@@ -53,11 +53,12 @@
 </template>
 
 <script>
+import { songPrettyTime } from '../utils/song/song'
+import { useStore } from 'vuex'
+import { usePosition } from '../plugins/hooks'
 import ThePlayerOverlayMobile from './ThePlayerOverlayMobile.vue'
 import AppBannerAuth from './AppBannerAuth.vue'
 import { computed, ref, watch } from '@vue/runtime-core'
-import { useStore } from 'vuex'
-import { usePosition } from '../plugins/hooks'
 import usePlayerApi from '../plugins/Player'
 
 export default {
@@ -72,7 +73,13 @@ export default {
     const store = useStore()
     const isAuth = computed(() => store.getters.isAuth)
     const user = computed(() => store.getters.user)
+
     const isOverlayMobileOpen = ref(false)
+
+    const computedWidthLine = (time, duration) => {
+      return (time / duration * 100).toFixed(2) + '%'
+    }
+
     const overlayMobileToggle = () => {
       if ($position.breakpoint < 3) {
         isOverlayMobileOpen.value = !isOverlayMobileOpen.value
@@ -83,6 +90,15 @@ export default {
     playerApi.initial()
 
     const playerState = computed(() => playerApi.state)
+    const songFormatedTime = computed(() => songPrettyTime(playerApi.state.songQueueCurrent.time))
+    const songFormatedDuration = computed(() => songPrettyTime(playerApi.state.songQueueCurrent.duration))
+    const authorTitle = computed(() => {
+      return playerApi.state.songQueueCurrent.artist.altname
+        ? playerApi.state.songQueueCurrent.artist.altname
+        : playerApi.state.songQueueCurrent.artist.name + ' ' + playerApi.state.songQueueCurrent.artist.surname
+    })
+    const timelineDuration = computed(() => computedWidthLine(playerApi.state.songQueueCurrent.time, playerApi.state.songQueueCurrent.duration))
+    const timelineVolume = computed(() => computedWidthLine(playerApi.state.settings.player_volume, 100))
 
     watch(playerApi.state, (state) => {
       if (state.songQueueCurrent.id) {
@@ -93,6 +109,11 @@ export default {
     })
 
     return {
+      timelineDuration,
+      timelineVolume,
+      songFormatedTime,
+      songFormatedDuration,
+      authorTitle,
       playerState,
       playerApi,
       isPlayerActive,
@@ -122,6 +143,8 @@ html.user-auth-false {
 
 <style scoped>
 .the-player {
+  --the-player-time-width: v-bind(timelineDuration);
+  --the-player-volume-width: v-bind(timelineVolume);
   display: flex;
   border-top: 1px solid var(--the-player-border-color);
   background: var(--the-player-background);
@@ -215,6 +238,7 @@ html.user-auth-false {
   color: var(--the-player-color);
 }
 .the-player__manage-time-current, .the-player__manage-time-duration {
+  min-width: 40px;
   padding: 0 0.5rem;
   font-weight: 400;
   font-size: 0.65rem;
@@ -234,7 +258,7 @@ html.user-auth-false {
   background-color: var(--the-player-line);
 }
 .the-player__manage-timeline::before {
-  width: 0%;
+  width: var(--the-player-time-width);
   content: " ";
   position: absolute;
   left: 0;
@@ -248,7 +272,7 @@ html.user-auth-false {
 }
 .the-player__manage-timeline::after {
   opacity: 0;
-  margin-left: calc(0% - 6px);
+  margin-left: calc(var(--the-player-time-width) - 6px);
   content: " ";
   position: absolute;
   left: 0;
@@ -284,7 +308,7 @@ html.user-auth-false {
   background-color: var(--the-player-line);
 }
 .the-player__tools-bar-volume::before {
-  width: 0%;
+  width: var(--the-player-volume-width);
   content: " ";
   position: absolute;
   left: 0;
@@ -298,7 +322,7 @@ html.user-auth-false {
 }
 .the-player__tools-bar-volume::after {
   opacity: 0;
-  margin-left: calc(0% - 6px);
+  margin-left: calc(var(--the-player-volume-width) - 6px);
   content: " ";
   position: absolute;
   left: 0;
