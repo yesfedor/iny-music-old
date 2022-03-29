@@ -10,13 +10,14 @@ function SongGetArtistsOnFeaturing(int $fid, int $aid) {
   $artists = dbGetAll($query, $var);
   for ($index = 0; $index < count($artists); $index++) {
     $artists[$index]['artist'] = SongGetArtistForSong($artists[$index]['aid']);
+    unset($artists[$index]['aid']);
   }
 
   return $artists;
 }
 
 function SongGetArtistForSong(int $aid) {
-  $query = "SELECT name, suranme, altname FROM Artists WHERE aid = :aid";
+  $query = "SELECT aid, name, suranme, altname FROM Artists WHERE aid = :aid";
   $var = [
     ':aid' => $aid
   ];

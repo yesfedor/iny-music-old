@@ -1,5 +1,6 @@
 import { reactive } from 'vue'
 import { useStore } from 'vuex'
+import { songPrettyTime } from '../../utils/song/song'
 import { usePlayerFetch } from './api'
 
 /**
@@ -23,8 +24,8 @@ const playerApi = reactive({
   state: {
     songQueue: {},
     songQueueCurrent: {
-      id: 0,
       artist: {
+        aid: '',
         altname: '',
         name: '',
         surname: ''
@@ -32,7 +33,10 @@ const playerApi = reactive({
       title: '',
       song: '',
       img_1024: '',
-      time: 0
+      time: 0,
+      duration: 0,
+      formatedDurationTime: '',
+      formatedPlayableTime: ''
     },
     userSongQueue: {},
     settings: {
@@ -59,6 +63,7 @@ const playerApi = reactive({
   playerCallback () {
     const onTimeUpdate = () => {
       this.state.songQueueCurrent.time = this.$player.currentTime
+      this.state.songQueueCurrent.formatedPlayableTime = songPrettyTime(this.$player.currentTime)
     }
     const onEnded = () => {
       this.logger('log', 'end song')
@@ -97,6 +102,8 @@ const playerApi = reactive({
       if (!songQueueCurrent?.id) return false
       this.state.songQueueCurrent = songQueueCurrent
       this.playerSetSrc(songQueueCurrent.song)
+      this.state.songQueueCurrent.formatedDurationTime = songPrettyTime(songQueueCurrent.duration)
+      this.state.songQueueCurrent.formatedPlayableTime = songPrettyTime(songQueueCurrent.time)
     })
 
     playerFetch.getPlayerSettings().then(settings => {

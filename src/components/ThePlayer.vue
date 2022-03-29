@@ -35,9 +35,9 @@
           <i class="the-player__manage-icon the-player__manage-icon_redo fas fa-redo"></i>
         </div>
         <div class="the-player__manage-time">
-          <span class="the-player__manage-time-current">{{ playerApi.state.songQueueCurrent.time }}</span>
+          <span class="the-player__manage-time-current">{{ playerApi.state.songQueueCurrent.formatedPlayableTime }}</span>
           <div class="the-player__manage-timeline"></div>
-          <span class="the-player__manage-time-duration">{{ playerApi.state.songQueueCurrent.duration }}</span>
+          <span class="the-player__manage-time-duration">{{ playerApi.state.songQueueCurrent.formatedDurationTime }}</span>
         </div>
       </div>
       <div class="the-player__tools-bar">
@@ -156,12 +156,15 @@ html.user-auth-false {
   font-size: 0.8rem;
   text-decoration: none;
 }
-
 .the-player__author {
   color: var(--the-player-color);
   font-weight: 600;
   font-size: 0.7rem;
   text-decoration: none;
+}
+.the-player__author:hover {
+  text-decoration: underline;
+  color: var(--the-player-color-hightlight);
 }
 .the-player__like {
   margin-left: 2rem;
