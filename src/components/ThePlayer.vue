@@ -8,20 +8,28 @@
           <router-link
             :to="{ name: 'Playlist', params: { playlistId: 1 }}"
             class="the-player__title text-truncate"
-            @click.stop
           >
             {{ playerApi.state.songQueueCurrent.title }}
             <span v-show="playerApi.state.songQueueCurrent.subtitle" class="the-player__subtitle">
               {{ playerApi.state.songQueueCurrent.subtitle }}
             </span>
           </router-link>
-          <router-link
-            :to="{ name: 'Artist', params: { artistId: playerApi.state.songQueueCurrent.artist.aid }}"
-            class="the-player__author text-truncate"
-            @click.stop
-          >
-            {{ authorTitle }}
-          </router-link>
+          <div class="d-flex">
+           <router-link
+              :to="{ name: 'Artist', params: { artistId: playerApi.state.songQueueCurrent.artist.aid }}"
+              class="the-player__author text-truncate"
+            >
+              {{ authorTitle }}
+            </router-link>
+            <router-link
+              v-for="feat in featuring"
+              :key="feat.aid"
+              :to="{ name: 'Artist', params: { artistId: feat.aid }}"
+              class="the-player__author text-truncate"
+            >
+              {{ authorPrettyTitle(feat) }}
+            </router-link>
+          </div>
         </div>
         <i class="the-player__like far fa-heart"></i>
       </div>
@@ -63,6 +71,7 @@ import ThePlayerOverlayMobile from './ThePlayerOverlayMobile.vue'
 import AppBannerAuth from './AppBannerAuth.vue'
 import { computed, ref, watch } from '@vue/runtime-core'
 import usePlayerApi from '../plugins/Player'
+import { authorPrettyFeaturing, authorPrettyTitle } from '../utils/song/author'
 
 export default {
   name: 'ThePlayer',
@@ -95,11 +104,8 @@ export default {
     const playerState = computed(() => playerApi.state)
     const songFormatedTime = computed(() => songPrettyTime(playerApi.state.songQueueCurrent.time))
     const songFormatedDuration = computed(() => songPrettyTime(playerApi.state.songQueueCurrent.duration))
-    const authorTitle = computed(() => {
-      return playerApi.state.songQueueCurrent.artist.altname
-        ? playerApi.state.songQueueCurrent.artist.altname
-        : playerApi.state.songQueueCurrent.artist.name + ' ' + playerApi.state.songQueueCurrent.artist.surname
-    })
+    const authorTitle = computed(() => authorPrettyTitle(playerApi.state.songQueueCurrent.artist))
+    const featuring = computed(() => authorPrettyFeaturing(playerApi.state.songQueueCurrent.featuring))
     const timelineDuration = computed(() => computedWidthLine(playerApi.state.songQueueCurrent.time, playerApi.state.songQueueCurrent.duration))
     const timelineVolume = computed(() => computedWidthLine(playerApi.state.settings.player_volume, 100))
 
@@ -146,6 +152,8 @@ export default {
     })
 
     return {
+      authorPrettyTitle,
+      featuring,
       volumeWheel,
       volumeClick,
       timelineClick,
@@ -223,10 +231,17 @@ html.user-auth-false {
   color: var(--the-player-color);
 }
 .the-player__author {
+  padding-right: 0.3rem;
   color: var(--the-player-color);
   font-weight: 600;
   font-size: 0.7rem;
   text-decoration: none;
+}
+.the-player__author::after {
+  content: ',';
+}
+.the-player__author:last-child::after {
+  content: '';
 }
 .the-player__author:hover {
   text-decoration: underline;

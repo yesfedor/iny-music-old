@@ -5,6 +5,7 @@ import store from './store'
 import Position from './plugins/Position'
 import Progress from './plugins/Progress'
 import Theme from './plugins/Theme'
+import ContextMenu from './plugins/ContextMenu'
 import './styles/main.css'
 
 const importRemoteStyle = (href, data = {}) => {
@@ -39,4 +40,5 @@ createApp(App)
   .use(Position)
   .use(Progress)
   .use(Theme)
+  .use(ContextMenu)
   .mount('#app')

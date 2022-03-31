@@ -31,6 +31,7 @@ const playerApi = reactive({
         name: '',
         surname: ''
       },
+      featuring: [],
       title: '',
       song: '',
       img_1024: '',

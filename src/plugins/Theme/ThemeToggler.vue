@@ -1,5 +1,5 @@
 <template>
-  <i @click.stop="toggle()" class="theme-toggler" :class="$theme.getIcon()"></i>
+  <i class="theme-toggler" :class="$theme.getIcon()"></i>
 </template>
 
 <script>
