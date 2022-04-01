@@ -54,7 +54,16 @@
       <div class="the-player__tools-bar">
         <i class="the-player__tools-bar-icon fas fa-stream"></i>
         <i class="the-player__tools-bar-icon fas fa-volume-up"></i>
-        <div @wheel="volumeWheel" @click="volumeClick" class="the-player__tools-bar-volume"></div>
+        <!-- <div @wheel="volumeWheel" @click="volumeClick" class="the-player__tools-bar-volume"></div> -->
+        <input
+          @wheel="volumeWheel"
+          type="range"
+          step="5"
+          min="0"
+          max="100"
+          value="20"
+          class="the-player__tools-bar-volume"
+        >
       </div>
     </div>
     <div class="the-player-plugin">
@@ -360,43 +369,26 @@ html.user-auth-false {
   font-size: 0.95rem;
 }
 .the-player__tools-bar-volume {
-  position: relative;
   width: calc(20% - 1rem);
   min-width: 80px;
+}
+.the-player__tools-bar-volume::-webkit-slider-runnable-track {
+  width: 100%;
   height: 4px;
   border-radius: 6px;
-  background-color: var(--the-player-line);
+  background: var(--the-player-line);
 }
-.the-player__tools-bar-volume::before {
-  width: var(--the-player-volume-width);
-  content: " ";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  border-radius: 5px;
-  background-color: var(--the-player-color);
-}
-.the-player__tools-bar-volume:hover::before {
-  background-color: var(--the-player-primary);
-}
-.the-player__tools-bar-volume::after {
+.the-player__tools-bar-volume::-webkit-slider-thumb {
   opacity: 0;
-  margin-left: calc(var(--the-player-volume-width) - 6px);
-  content: " ";
-  position: absolute;
-  left: 0;
-  top: -4px;
-  bottom: 0;
+  position: relative;
+  top: -5px;
   height: 12px;
   width: 12px;
-  border-radius: 200%;
-  background-color: var(--the-player-color-hightlight);
+  background: var(--the-player-time-width);
 }
-.the-player__tools-bar-volume:hover::after {
+.the-player__tools-bar-volume:hover::-webkit-slider-thumb {
   opacity: 1;
 }
-
 .the-player_disabled .the-player__title,
 .the-player_disabled .the-player__author,
 .the-player_disabled .the-player__like,
