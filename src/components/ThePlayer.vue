@@ -8,28 +8,20 @@
           <router-link
             :to="{ name: 'Playlist', params: { playlistId: 1 }}"
             class="the-player__title text-truncate"
+            @click.stop
           >
             {{ playerApi.state.songQueueCurrent.title }}
             <span v-show="playerApi.state.songQueueCurrent.subtitle" class="the-player__subtitle">
               {{ playerApi.state.songQueueCurrent.subtitle }}
             </span>
           </router-link>
-          <div class="d-flex">
-           <router-link
-              :to="{ name: 'Artist', params: { artistId: playerApi.state.songQueueCurrent.artist.aid }}"
-              class="the-player__author text-truncate"
-            >
-              {{ authorTitle }}
-            </router-link>
-            <router-link
-              v-for="feat in featuring"
-              :key="feat.aid"
-              :to="{ name: 'Artist', params: { artistId: feat.aid }}"
-              class="the-player__author text-truncate"
-            >
-              {{ authorPrettyTitle(feat) }}
-            </router-link>
-          </div>
+          <router-link
+            :to="{ name: 'Artist', params: { artistId: playerApi.state.songQueueCurrent.artist.aid }}"
+            class="the-player__author text-truncate"
+            @click.stop
+          >
+            {{ authorTitle }}
+          </router-link>
         </div>
         <i class="the-player__like far fa-heart"></i>
       </div>
@@ -54,16 +46,7 @@
       <div class="the-player__tools-bar">
         <i class="the-player__tools-bar-icon fas fa-stream"></i>
         <i class="the-player__tools-bar-icon fas fa-volume-up"></i>
-        <!-- <div @wheel="volumeWheel" @click="volumeClick" class="the-player__tools-bar-volume"></div> -->
-        <input
-          @wheel="volumeWheel"
-          type="range"
-          step="5"
-          min="0"
-          max="100"
-          value="20"
-          class="the-player__tools-bar-volume"
-        >
+        <div @wheel="volumeWheel" @click="volumeClick" class="the-player__tools-bar-volume"></div>
       </div>
     </div>
     <div class="the-player-plugin">
@@ -80,7 +63,6 @@ import ThePlayerOverlayMobile from './ThePlayerOverlayMobile.vue'
 import AppBannerAuth from './AppBannerAuth.vue'
 import { computed, ref, watch } from '@vue/runtime-core'
 import usePlayerApi from '../plugins/Player'
-import { authorPrettyFeaturing, authorPrettyTitle } from '../utils/song/author'
 
 export default {
   name: 'ThePlayer',
@@ -113,8 +95,11 @@ export default {
     const playerState = computed(() => playerApi.state)
     const songFormatedTime = computed(() => songPrettyTime(playerApi.state.songQueueCurrent.time))
     const songFormatedDuration = computed(() => songPrettyTime(playerApi.state.songQueueCurrent.duration))
-    const authorTitle = computed(() => authorPrettyTitle(playerApi.state.songQueueCurrent.artist))
-    const featuring = computed(() => authorPrettyFeaturing(playerApi.state.songQueueCurrent.featuring))
+    const authorTitle = computed(() => {
+      return playerApi.state.songQueueCurrent.artist.altname
+        ? playerApi.state.songQueueCurrent.artist.altname
+        : playerApi.state.songQueueCurrent.artist.name + ' ' + playerApi.state.songQueueCurrent.artist.surname
+    })
     const timelineDuration = computed(() => computedWidthLine(playerApi.state.songQueueCurrent.time, playerApi.state.songQueueCurrent.duration))
     const timelineVolume = computed(() => computedWidthLine(playerApi.state.settings.player_volume, 100))
 
@@ -161,8 +146,6 @@ export default {
     })
 
     return {
-      authorPrettyTitle,
-      featuring,
       volumeWheel,
       volumeClick,
       timelineClick,
@@ -240,17 +223,10 @@ html.user-auth-false {
   color: var(--the-player-color);
 }
 .the-player__author {
-  padding-right: 0.3rem;
   color: var(--the-player-color);
   font-weight: 600;
   font-size: 0.7rem;
   text-decoration: none;
-}
-.the-player__author::after {
-  content: ',';
-}
-.the-player__author:last-child::after {
-  content: '';
 }
 .the-player__author:hover {
   text-decoration: underline;
@@ -369,26 +345,43 @@ html.user-auth-false {
   font-size: 0.95rem;
 }
 .the-player__tools-bar-volume {
+  position: relative;
   width: calc(20% - 1rem);
   min-width: 80px;
-}
-.the-player__tools-bar-volume::-webkit-slider-runnable-track {
-  width: 100%;
   height: 4px;
   border-radius: 6px;
-  background: var(--the-player-line);
+  background-color: var(--the-player-line);
 }
-.the-player__tools-bar-volume::-webkit-slider-thumb {
+.the-player__tools-bar-volume::before {
+  width: var(--the-player-volume-width);
+  content: " ";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 5px;
+  background-color: var(--the-player-color);
+}
+.the-player__tools-bar-volume:hover::before {
+  background-color: var(--the-player-primary);
+}
+.the-player__tools-bar-volume::after {
   opacity: 0;
-  position: relative;
-  top: -5px;
+  margin-left: calc(var(--the-player-volume-width) - 6px);
+  content: " ";
+  position: absolute;
+  left: 0;
+  top: -4px;
+  bottom: 0;
   height: 12px;
   width: 12px;
-  background: var(--the-player-time-width);
+  border-radius: 200%;
+  background-color: var(--the-player-color-hightlight);
 }
-.the-player__tools-bar-volume:hover::-webkit-slider-thumb {
+.the-player__tools-bar-volume:hover::after {
   opacity: 1;
 }
+
 .the-player_disabled .the-player__title,
 .the-player_disabled .the-player__author,
 .the-player_disabled .the-player__like,
