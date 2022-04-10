@@ -39,7 +39,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .plugin-context-menu-base {
   padding: 1rem 1.25rem;
   width: v-bind(width);
