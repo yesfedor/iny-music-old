@@ -52,6 +52,7 @@ export default {
   border: 1px solid var(--layout-main-background);
   background: var(--layout-wrapper-colorfull);
   backdrop-filter: blur(8px) saturate(180%);
+  box-shadow: 0 0 1rem 0 var(--layout-wrapper-colorfull);
   z-index: 99;
 }
 </style>
