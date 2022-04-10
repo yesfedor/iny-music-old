@@ -8,8 +8,11 @@ const ContextMenuApp = reactive({
   component: null,
   state: false,
 
-  w: 0,
-  h: 0,
+  w: 200,
+  h: 300,
+
+  x: 0,
+  y: 0,
 
   show () {
     this.state = true
@@ -26,7 +29,9 @@ const ContextMenuApp = reactive({
   listener (event, type = 'show') {
     switch (type) {
       case 'show':
-        // event.preventDefault()
+        event.preventDefault()
+        this.x = event.pageX
+        this.y = event.pageY
         this.show()
         break
       case 'hide':
