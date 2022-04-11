@@ -3,7 +3,6 @@
     <progress-preloader></progress-preloader>
     <progress-line></progress-line>
     <div class="layout__transport"></div>
-    <context-menu-base></context-menu-base>
     <component :is="component"></component>
   </div>
 </template>

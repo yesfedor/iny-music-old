@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { computed, inject } from '@vue/runtime-core'
+import { computed, inject, onMounted, onUnmounted } from '@vue/runtime-core'
 
 export default {
   name: 'ContextMenuBase',
@@ -28,6 +28,15 @@ export default {
       if (pageY + contextMenu.h > position.clientY) pageY = pageY - contextMenu.h
       return pageY + 'px'
     })
+
+    onMounted(() => {
+      contextMenu.mounted()
+    })
+
+    onUnmounted(() => {
+      contextMenu.unmounted()
+    })
+
     return {
       width,
       height,

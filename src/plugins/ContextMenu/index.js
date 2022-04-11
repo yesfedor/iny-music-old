@@ -2,6 +2,8 @@ import { reactive } from 'vue'
 import ContextMenuBase from './ContextMenuBase'
 
 const ContextMenuApp = reactive({
+  isLifeCycle: false,
+
   $el: null,
 
   name: '',
@@ -27,6 +29,7 @@ const ContextMenuApp = reactive({
   drawer () {},
 
   listener (event, type = 'show') {
+    if (!this.isLifeCycle) return false
     switch (type) {
       case 'show':
         event.preventDefault()
@@ -50,6 +53,14 @@ const ContextMenuApp = reactive({
 
     window.addEventListener('contextmenu', _listenerShow)
     window.addEventListener('click', _listenerHide)
+  },
+
+  mounted () {
+    this.isLifeCycle = true
+  },
+
+  unmounted () {
+    this.isLifeCycle = false
   }
 })
 
