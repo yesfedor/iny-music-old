@@ -73,7 +73,7 @@ function useInyMiddleware (response) {
     })
     return false
   }
-  return response.data
+  return response
 }
 
 export const Api = new Proxy({
@@ -267,7 +267,8 @@ export const Api = new Proxy({
    */
   async login (username, password) {
     const clientId = localStorage.getItem(this.config.localStorageName.clientId)
-    const response = await axios.get(API_PATH_METHOD + `user.login?v=1.0&email=${username}&password=${password}&client_id=${clientId}`)
+    const response = useInyMiddleware(await axios.get(API_PATH_METHOD + `user.login?v=1.0&email=${username}&password=${password}&client_id=${clientId}`))
+
     const userData = this.parseJwt(response.data.jwt)
     if (userData) {
       localStorage.setItem(this.config.localStorageName.jwt, response.data.jwt)
@@ -291,7 +292,7 @@ export const Api = new Proxy({
    */
   async register (name, surname, email, gender, password) {
     const clientId = localStorage.getItem(this.config.localStorageName.clientId)
-    const response = await axios.get(API_PATH_METHOD + `user.register?v=1.0&client_id=${clientId}&name=${name}&surname=${surname}&email=${email}&gender=${gender}&password=${password}`)
+    const response = useInyMiddleware(await axios.get(API_PATH_METHOD + `user.register?v=1.0&client_id=${clientId}&name=${name}&surname=${surname}&email=${email}&gender=${gender}&password=${password}`))
     const userData = this.parseJwt(response.data.jwt)
     if (userData) {
       localStorage.setItem(this.config.localStorageName.jwt, response.data.jwt)

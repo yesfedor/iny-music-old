@@ -31,9 +31,6 @@ const importRemoteScript = (src, data = {}) => {
 importRemoteStyle('https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css')
 importRemoteScript('https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js')
 
-// fontawesome free icon
-importRemoteScript('https://kit.fontawesome.com/8e0e01f36f.js', { crossorigin: 'anonymous' })
-
 createApp(App)
   .use(store)
   .use(router)
