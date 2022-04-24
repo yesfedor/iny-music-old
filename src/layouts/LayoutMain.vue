@@ -1,5 +1,6 @@
 <template>
   <div class="layout__main">
+    <context-menu-base></context-menu-base>
     <the-header class="layout__header"></the-header>
     <the-aside class="layout__aside"></the-aside>
     <the-wrapper class="layout__wrapper"></the-wrapper>

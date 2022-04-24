@@ -21,8 +21,8 @@ export default {
   cursor: pointer;
   padding: .65rem 1.5rem;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: space-around;
   align-items: center;
   width: 100%;
   height: 100%;
@@ -32,13 +32,14 @@ export default {
   display: block;
 }
 .app-banner-auth__text {
-  display: block;
+  display: none;
   font-weight: 400;
-  font-size: 0.85rem;
+  font-size: 0.50rem;
   color: #ffffff;
 }
 .app-banner-auth__text_title {
-  font-size: .85rem;
+  display: block;
+  font-size: .60rem;
   text-transform: uppercase;
 }
 .app-banner-auth__action {
@@ -52,5 +53,19 @@ export default {
   border-radius: 3rem;
   color: #509bf5;
   background: #ffffff;
+}
+
+@media (min-width: 992px) {
+  .app-banner-auth {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .app-banner-auth__text {
+    display: block;
+    font-size: 0.85rem;
+  }
+  .app-banner-auth__text_title {
+    font-size: 0.85rem;
+  }
 }
 </style>
