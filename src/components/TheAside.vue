@@ -53,20 +53,17 @@ export default {
       // router push on new playlist
     }
     const sizerDrag = (event) => {
+      event.preventDefault()
       if (event.clientX >= 230 && event.clientX <= 450) {
         asideWidth = event.clientX
         document.documentElement.style.setProperty('--aside-width', asideWidth + 'px')
         localStorage.setItem('asideWidth', event.clientX + 'px')
       }
     }
-    const sizerDrop = (event) => {
-      console.log('123123')
-    }
 
     return {
       asideWidth,
       sizerDrag,
-      sizerDrop,
       createPlaylist
     }
   }
@@ -100,7 +97,7 @@ export default {
   height: 100%;
   background: var(--aside-background);
   cursor: col-resize;
-  user-select: none;
+  resize: horizontal;
 }
 .the-aside__sizer:hover {
   background: var(--aside-color-hightlight);

@@ -47,7 +47,22 @@
         </div>
       </div>
     </template>
-    <template v-else></template>
+    <template v-else>
+      <div class="the-header__mobile">
+        <div class="the-header__action the-header__action_left">
+           <router-link :to="{ name: 'Main' }" class="the-header__logo logo">
+            <i class="fab fa-spotify logo__icon"></i>
+            <span class="logo__text">Music</span>
+          </router-link>
+        </div>
+        <div class="the-header__action">
+           <router-link :to="{ name: 'Signin' }" class="the-header__dropdown-button dropdown-item">
+             Войти
+             <i class="the-header__button-inner fas fa-user"></i>
+           </router-link>
+        </div>
+      </div>
+    </template>
   </header>
 </template>
 
@@ -129,6 +144,11 @@ export default {
   top: 0px;
   color: var(--header-color);
   z-index: 3;
+}
+.the-header__mobile {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 .the-header_background_system {
   background: var(--header-background);
@@ -218,6 +238,7 @@ export default {
   font-weight: 600;
   font-size: 0.95rem;
   color: var(--header-dropdown-color);
+  text-decoration: unset;
 }
 .the-header__dropdown-button:hover, .the-header__dropdown-button:focus {
   background: var(--header-dropdown-background-hover);
@@ -252,5 +273,27 @@ export default {
 .the-header__search-icon {
   padding: 0rem 0.5rem;
   color: var(--header-color-hightlight);
+}
+
+.the-header__logo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: var(--header-height);
+}
+.logo {
+  text-decoration: none;
+}
+.logo__icon {
+  display: inline;
+  font-size: 1.45rem;
+  color: var(--aside-logo-color);
+}
+.logo__text {
+  display: inline;
+  padding-left: 0.5rem;
+  color: var(--aside-logo-color);
+  font-weight: 600;
+  font-size: 1.2rem;
 }
 </style>

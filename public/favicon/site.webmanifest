@@ -1,0 +1,20 @@
+{
+    "name": "INY Music",
+    "short_name": "INY Music",
+    "icons": [
+        {
+            "src": "/favicon/android-chrome-192x192.png?v=1.0",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/favicon/android-chrome-512x512.png?v=1.0",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#000000",
+    "background_color": "#000000",
+    "start_url": "https://music.iny.su/?os=android&browser=chrome",
+    "display": "standalone"
+}

@@ -7,7 +7,7 @@ var configFront = {
   password: 'asd486982asd',
   host: 'vh370.timeweb.ru',
   port: 21,
-  localRoot: 'E:/development/iny-music/dist/',
+  localRoot: `${__dirname}/dist/`,
   remoteRoot: 'spotyfree/public_html/',
   // include: ["*", "**/*"],      // this would upload everything except dot files
   include: ['*', '**/*'],

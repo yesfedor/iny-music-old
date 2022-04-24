@@ -33,7 +33,7 @@ function AppRouterMethod ($version, $method, $args=[]) {
         continue;
       }
 
-      if ($args[$prop]) {
+      if ($args[$prop] or $data['type'] === 'Bool') {
         // the argument exists, leading to the type
         settype($args[$prop], $data['type']);
       } else {

@@ -5,6 +5,7 @@ import store from './store'
 import Position from './plugins/Position'
 import Progress from './plugins/Progress'
 import Theme from './plugins/Theme'
+import ContextMenu from './plugins/ContextMenu'
 import './styles/main.css'
 
 const importRemoteStyle = (href, data = {}) => {
@@ -30,13 +31,11 @@ const importRemoteScript = (src, data = {}) => {
 importRemoteStyle('https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css')
 importRemoteScript('https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js')
 
-// fontawesome free icon
-importRemoteScript('https://kit.fontawesome.com/8e0e01f36f.js', { crossorigin: 'anonymous' })
-
 createApp(App)
   .use(store)
   .use(router)
   .use(Position)
   .use(Progress)
   .use(Theme)
+  .use(ContextMenu)
   .mount('#app')

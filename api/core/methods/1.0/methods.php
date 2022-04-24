@@ -289,6 +289,126 @@ $methods = [
     'detail' => 'Get server time',
     'link' => '/time',
     'props' => []
+  ],
+  'song.getBySid' => [
+    'in_active' => true,
+    'beforeMethods' => [],
+    'objects' => ['Song'],
+    'title' => 'Song',
+    'detail' => 'Get song informnation',
+    'link' => '/getSong',
+    'props' => [
+      'sid' => [
+        'required' => true,
+        'type' => 'Int',
+        'default' => 1,
+      ]
+    ]
+  ],
+  'song.getQueueCurrent' => [
+    'in_active' => true,
+    'beforeMethods' => ['User.online'],
+    'objects' => ['Song', 'User', 'Device'],
+    'title' => 'Song',
+    'detail' => 'Get song informnation',
+    'link' => '/getSong',
+    'props' => [
+      'jwt' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => '',
+      ],
+      'client_id' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => ''
+      ]
+    ]
+  ],
+  'song.setQueueCurrent' => [
+    'in_active' => true,
+    'beforeMethods' => ['User.online'],
+    'objects' => ['Song', 'User', 'Device'],
+    'title' => 'Song',
+    'detail' => 'Get song informnation',
+    'link' => '/getSong',
+    'props' => [
+      'jwt' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => '',
+      ],
+      'client_id' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => ''
+      ],
+      'sid' => [
+        'required' => true,
+        'type' => 'Int',
+        'default' => 1
+      ],
+      'time' => [
+        'required' => false,
+        'type' => 'Int',
+        'default' => 0
+      ],
+    ]
+  ],
+  'song.getPlayerSettings' => [
+    'in_active' => true,
+    'beforeMethods' => ['User.online'],
+    'objects' => ['Song', 'User', 'Device'],
+    'title' => 'Song',
+    'detail' => 'Get player settings',
+    'link' => '/getSettings',
+    'props' => [
+      'jwt' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => ''
+      ],
+      'client_id' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => ''
+      ]
+    ]
+  ],
+  'song.setPlayerSettings' => [
+    'in_active' => true,
+    'beforeMethods' => ['User.online'],
+    'objects' => ['Song', 'User', 'Device'],
+    'title' => 'Song',
+    'detail' => 'Get player settings',
+    'link' => '/getSettings',
+    'props' => [
+      'jwt' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => ''
+      ],
+      'client_id' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => ''
+      ],
+      'player_volume' => [
+        'required' => false,
+        'type' => 'Int',
+        'default' => 0
+      ],
+      'player_shuffle' => [
+        'required' => true,
+        'type' => 'Bool',
+        'default' => false
+      ],
+      'player_repeat' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => ''
+      ]
+    ]
   ]
 ];
 
