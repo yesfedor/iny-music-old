@@ -46,7 +46,16 @@
       <div class="the-player__tools-bar">
         <i class="the-player__tools-bar-icon fas fa-stream"></i>
         <i class="the-player__tools-bar-icon fas fa-volume-up"></i>
-        <div @wheel="volumeWheel" @click="volumeClick" class="the-player__tools-bar-volume"></div>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          step="1"
+          class="the-player__tools-bar-volume"
+          :value="timelineVolume.slice(0, -1)"
+          @change="volumeChange"
+          @wheel="volumeWheel"
+        />
       </div>
     </div>
     <div class="the-player-plugin">
@@ -111,13 +120,7 @@ export default {
       playerApi.playerSetCurrentTime(timeline)
     }
 
-    const volumeClick = (event) => {
-      const lineWidth = event.srcElement.offsetWidth
-      const clickWidth = event.offsetX
-      const clickPersent = clickWidth / lineWidth
-      const volume = (100 * clickPersent).toFixed(0)
-      playerApi.volumeChange(volume)
-    }
+    const volumeChange = (event) => playerApi.volumeChange(event.target.value)
 
     const volumeWheel = (event) => {
       const setVolume = (volumeOffset) => {
@@ -146,8 +149,8 @@ export default {
     })
 
     return {
+      volumeChange,
       volumeWheel,
-      volumeClick,
       timelineClick,
       timelineDuration,
       timelineVolume,
@@ -345,12 +348,25 @@ html.user-auth-false {
   font-size: 0.95rem;
 }
 .the-player__tools-bar-volume {
+  -webkit-appearance: none;
   position: relative;
   width: calc(20% - 1rem);
   min-width: 80px;
   height: 4px;
   border-radius: 6px;
   background-color: var(--the-player-line);
+}
+.the-player__tools-bar-volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  position: relative;
+  left: 0;
+  bottom: 0;
+  height: 12px;
+  width: 12px;
+  border-radius: 200%;
+  background-color: var(--the-player-color-hightlight);
+  opacity: 1;
+  z-index: 1;
 }
 .the-player__tools-bar-volume::before {
   width: var(--the-player-volume-width);
@@ -364,22 +380,6 @@ html.user-auth-false {
 }
 .the-player__tools-bar-volume:hover::before {
   background-color: var(--the-player-primary);
-}
-.the-player__tools-bar-volume::after {
-  opacity: 0;
-  margin-left: calc(var(--the-player-volume-width) - 6px);
-  content: " ";
-  position: absolute;
-  left: 0;
-  top: -4px;
-  bottom: 0;
-  height: 12px;
-  width: 12px;
-  border-radius: 200%;
-  background-color: var(--the-player-color-hightlight);
-}
-.the-player__tools-bar-volume:hover::after {
-  opacity: 1;
 }
 
 .the-player_disabled .the-player__title,

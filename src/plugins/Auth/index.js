@@ -6,6 +6,7 @@
  */
 
 import axios from 'axios'
+import { API_HOST, API_PATH, API_PROTOCOL } from '../../api/config'
 
 const isLogger = true
 const logger = (log, type = 'warn') => {
@@ -15,12 +16,12 @@ const logger = (log, type = 'warn') => {
 }
 
 const API_CONFIG = {
-  protocol: 'http:',
-  host: 'music.iny.su',
-  pathname: 'api/method/'
+  protocol: API_PROTOCOL,
+  host: API_HOST,
+  pathname: API_PATH
 }
 
-const API_PATH_METHOD = `${API_CONFIG.protocol}//${API_CONFIG.host}/${API_CONFIG.pathname}`
+const API_PATH_METHOD = `${API_CONFIG.protocol}${API_CONFIG.host}${API_CONFIG.pathname}`
 
 function useInyDeviceObject () {
   return {
