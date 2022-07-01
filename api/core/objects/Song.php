@@ -19,7 +19,7 @@ function SongGetArtistsOnFeaturing(int $fid, int $aid)
 
 function SongGetArtistForSong(int $aid)
 {
-  $query = "SELECT aid, name, suranme, altname FROM Artists WHERE aid = :aid";
+  $query = "SELECT aid, name, surname, altname FROM Artists WHERE aid = :aid";
   $var = [
     ':aid' => $aid
   ];

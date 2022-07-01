@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `Artists` (
   `owner_uid` int(9) NOT NULL,
   `verify` tinyint(1) NOT NULL,
   `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `suranme` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `surname` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `altname` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `img` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `keywords` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `Artists` (
 -- Дамп данных таблицы `Artists`
 --
 
-INSERT INTO `Artists` (`aid`, `owner_uid`, `verify`, `name`, `suranme`, `altname`, `img`, `keywords`, `updated_at`, `created_at`) VALUES
+INSERT INTO `Artists` (`aid`, `owner_uid`, `verify`, `name`, `surname`, `altname`, `img`, `keywords`, `updated_at`, `created_at`) VALUES
 (1, 1, 1, 'Адиль', 'Жалелов', 'скриптонит', '/store/cloud/arists/aid1.png', 'Скриптонит Адиль Жалелов', 1648311462, 1648311462),
 (2, 2, 1, 'Фёдор\r\n', 'Инсаров', 'feduk', '/store/cloud/arists/aid2.png', 'FEDUK Инсаров', 1648311462, 1648311462);
 
