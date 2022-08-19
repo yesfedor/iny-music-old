@@ -409,7 +409,87 @@ $methods = [
         'default' => ''
       ]
     ]
-  ]
+  ],
+  'song.setUserSongQueue' => [
+    'in_active' => true,
+    'beforeMethods' => ['User.online'],
+    'objects' => ['Song', 'User', 'Device'],
+    'title' => 'Song',
+    'detail' => 'set',
+    'link' => '/setUserSongQueue',
+    'props' => [
+      'jwt' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => ''
+      ],
+      'client_id' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => ''
+      ],
+      'type' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => ''
+      ],
+      'type_value' => [
+        'required' => true,
+        'type' => 'Int',
+        'default' => ''
+      ]
+    ]
+  ],
+  'song.getUserSongQueue' => [
+    'in_active' => true,
+    'beforeMethods' => ['User.online'],
+    'objects' => ['Song', 'User', 'Device'],
+    'title' => 'Song',
+    'detail' => 'get',
+    'link' => '/getUserSongQueue',
+    'props' => [
+      'jwt' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => ''
+      ],
+      'client_id' => [
+        'required' => true,
+        'type' => 'String',
+        'default' => ''
+      ]
+    ]
+  ],
+  'album.getByAlid' => [
+    'in_active' => true,
+    'beforeMethods' => [],
+    'objects' => ['Album'],
+    'title' => 'Song',
+    'detail' => 'get',
+    'link' => '/getUserSongQueue',
+    'props' => [
+      'alid' => [
+        'required' => true,
+        'type' => 'Int',
+        'default' => ''
+      ]
+    ]
+  ],
+  'album.getAlbumContent' => [
+    'in_active' => true,
+    'beforeMethods' => [],
+    'objects' => ['Album', 'Song'],
+    'title' => 'Song',
+    'detail' => 'get',
+    'link' => '/getUserSongQueue',
+    'props' => [
+      'alid' => [
+        'required' => true,
+        'type' => 'Int',
+        'default' => ''
+      ]
+    ]
+  ],
 ];
 
 return $methods;
